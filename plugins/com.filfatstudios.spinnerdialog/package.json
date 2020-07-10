@@ -1,0 +1,78 @@
+{
+  "_from": "git+https://github.com/filfat-Studios-AB/cordova-plugin-spinnerdialog.git",
+  "_id": "cordova-plugin-progress-indicator@1.0.3",
+  "_inBundle": false,
+  "_integrity": "",
+  "_location": "/cordova-plugin-progress-indicator",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "git",
+    "raw": "https://github.com/filfat-Studios-AB/cordova-plugin-spinnerdialog",
+    "rawSpec": "https://github.com/filfat-Studios-AB/cordova-plugin-spinnerdialog",
+    "saveSpec": "git+https://github.com/filfat-Studios-AB/cordova-plugin-spinnerdialog.git",
+    "fetchSpec": "https://github.com/filfat-Studios-AB/cordova-plugin-spinnerdialog.git",
+    "gitCommittish": null
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "git+https://github.com/filfat-Studios-AB/cordova-plugin-spinnerdialog.git#17ba441e4bb00ee9c878fcea4e57d5e1521e30d2",
+  "_spec": "https://github.com/filfat-Studios-AB/cordova-plugin-spinnerdialog",
+  "_where": "F:\\apps\\MOBILE\\Samuday360\\Samuday 360",
+  "author": {
+    "name": "filfat-studios-ab"
+  },
+  "bugs": {
+    "url": "https://github.com/filfat-Studios-AB/cordova-plugin-spinnerdialog/issues"
+  },
+  "bundleDependencies": false,
+  "cordova": {
+    "id": "cordova-plugin-spinnerdialog",
+    "platforms": [
+      "android",
+      "ios",
+      "wp8",
+      "windows"
+    ]
+  },
+  "deprecated": false,
+  "description": "A Cordova plugin for showing a progress indicator based on Paldom/SpinnerDialog",
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=3.4.0"
+    }
+  ],
+  "homepage": "http://filfat-studios-ab.github.io/cordova-plugin-spinnerdialog/",
+  "keywords": [
+    "cordova",
+    "spinner",
+    "dialog",
+    "spinnerdialog",
+    "progress",
+    "indicator",
+    "progressindicator",
+    "plugin",
+    "notification",
+    "ecosystem:cordova",
+    "cordova-android",
+    "cordova-ios",
+    "cordova-wp8",
+    "cordova-windows",
+    "android",
+    "ios",
+    "wp8",
+    "windows",
+    "10",
+    "8.1",
+    "phone"
+  ],
+  "license": "MIT",
+  "name": "cordova-plugin-progress-indicator",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/filfat-Studios-AB/cordova-plugin-spinnerdialog.git"
+  },
+  "version": "1.0.3"
+}

@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "F:\\apps\\MOBILE\\Samuday360\\Samuday 360\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi_icon.png.flat",
+        "source": "F:\\apps\\MOBILE\\Samuday360\\Samuday 360\\platforms\\android\\app\\src\\main\\res\\mipmap-mdpi\\icon.png"
+    },
+    {
+        "merged": "F:\\apps\\MOBILE\\Samuday360\\Samuday 360\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\xml_config.xml.flat",
+        "source": "F:\\apps\\MOBILE\\Samuday360\\Samuday 360\\platforms\\android\\app\\src\\main\\res\\xml\\config.xml"
+    },
+    {
+        "merged": "F:\\apps\\MOBILE\\Samuday360\\Samuday 360\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_screen.png.flat",
+        "source": "F:\\apps\\MOBILE\\Samuday360\\Samuday 360\\platforms\\android\\app\\src\\main\\res\\drawable-mdpi\\screen.png"
+    }
+]

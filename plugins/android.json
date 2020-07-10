@@ -1,0 +1,33 @@
+{
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "com.technowell.samuday360"
+    },
+    "cordova-plugin-geolocation": {
+      "PACKAGE_NAME": "com.technowell.samuday360"
+    },
+    "cordova-plugin-network-information": {
+      "PACKAGE_NAME": "com.technowell.samuday360"
+    },
+    "cordova-plugin-dialogs": {
+      "PACKAGE_NAME": "com.technowell.samuday360"
+    },
+    "cordova-plugin-device": {
+      "PACKAGE_NAME": "com.technowell.samuday360"
+    },
+    "com.filfatstudios.spinnerdialog": {
+      "PACKAGE_NAME": "com.technowell.samuday360"
+    },
+    "cordova-plugin-splashscreen": {
+      "PACKAGE_NAME": "com.technowell.samuday360"
+    }
+  },
+  "dependent_plugins": {}
+}
