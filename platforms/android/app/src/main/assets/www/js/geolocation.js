@@ -1,9 +1,13 @@
 // JavaScript Document
 function geolocation()
-{navigator.geolocation.getCurrentPosition(geosuccess, ongeoError, { maximumAge: 5000, timeout: 7000, enableHighAccuracy: true });}
+{
+	SpinnerDialog.show("Samuday 360", "Loading Geolocation.....", true);
+	navigator.geolocation.getCurrentPosition(geosuccess, ongeoError, { maximumAge: 5000, timeout: 7000, enableHighAccuracy: true });
+}
 	
 	
 var geosuccess = function(position) {
+	SpinnerDialog.hide();
 		featuress=[];
 		var sources = vectorLayers.getSource();
 		sources.clear();
@@ -17,7 +21,7 @@ var geosuccess = function(position) {
 		sources.addFeatures(featuress);
 };
 
-function ongeoError(error) {navigator.notification.alert("GPS Problem", function(){}, 'Samuday 360','Done');}
+function ongeoError(error) {SpinnerDialog.hide(); navigator.notification.alert("GPS Problem", function(){}, 'Samuday 360','Done');}
 
 	
 //-------watch navigator---------------

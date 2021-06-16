@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" >
   <head>
-    <meta charset="UTF-8">
-    <title>samuday</title>
+     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>samuday</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src *; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data:">
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="fonts/font-awesome/css/font-awesome.min.css" media="all" >
     <link href="css/mdb.min.css" rel="stylesheet">
@@ -13,49 +16,33 @@
     <script type="text/javascript" src="cordova.js"></script>
 
   </head>
-  <body onload="verifyUser()">
+  <body onload="verifyUser()" style="height: 100vh !important; background-image: url(img/bg.png);">
     <main>
 
       <nav class="navbar navbar-expand-lg navbar-dark" style="background:#0b70b3;padding-top: 0px;padding-bottom: 0px;">
         <a class="navbar-brand" href="#"><img src="img/logo5.png" width="50%" style="height: 48px; width: 49px;"></a>
-          <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button> -->
+        
       </nav>                
-      <!-- <div class="collapse navbar-collapse" id="navbarText" style="background:cornflowerblue">
-        <ul class="navbar-nav mr-auto" style="padding: 15px;">
-            <li class="nav-item"><a class="nav-link dropdown-toggle">Login</a></li>  
-        </ul>
-    </div>
- -->  </main>
+    </main>
   <!-- ========== First Time Login Form ========== -->
-  <div class="container" id="loginform" style="display:none;">
-    <div class="form-group" style="height:40px;"><img id="attendanceicon" class="img-circle logicon" src="img/attendance.png" /></div>
-    <div class="form-group">
-      <label for="loginusername"><span class="mandate">* </span>User ID</label>
-      <input type="text" class="form-control" id="loginusername" value="user@hcl.com">
+  <div class="container" id="loginform" style="display:none; margin-top: 52px">
+   <div class="form-group">
+      <label for="loginusername"><span class="mandate">* </span>Email ID</label>
+      <input type="email" class="form-control" id="loginusername" value="">
     </div>
     <div class="form-group">
       <label for="loginpwd"> <span class="mandate">* </span> Password</label>
-      <input type="password" class="form-control" id="loginpwd" value="password">
+      <input type="password" class="form-control" id="loginpwd" value="">
     </div>
-      <!-- <div class="checkbox">
-        <label><input type="checkbox"> Remember me</label>
-      </div> -->
     <div align="center">
       <button type="button" class="btn btn-default" id="loginbutton">Login</button>
     </div>
 
-<br>
-<br>
-    <p>51636763 - user1@hcl.com</p>
-    <p>51686937 - user2@hcl.com</p>
-    <p>51623721 - user3@hcl.com</p>
   </div>
+  
+<div class="col-sm-12 col-md-12" style="background-image: url(img/bg.png); position: fixed; bottom: 5px; background-color: white;"><span>App Version 4.0.7 v.</span></div>
 
-
-  <!-- Employee verification Form (for attendance) -->
-  <div class="container" id="verificationform" style="display: none">
+ <div class="container" id="verificationform" style="display: none">
     <div class="form-group">
       <label for="loginemail"> <span class="mandate">* </span> HCL E-Mail</label>
       <input type="email" class="form-control" id="loginemail">
@@ -64,9 +51,7 @@
       <label for="loginmobile"> <span class="mandate">* </span> Mobile</label>
       <input type="number" class="form-control" id="loginmobile">
     </div>
-      <!-- <div class="checkbox">
-        <label><input type="checkbox"> Remember me</label>
-      </div> -->
+    
     <div align="center">
       <button type="button" class="btn btn-default" id="verificationmobilebutton">Verify</button>
     </div>
@@ -74,15 +59,15 @@
   </div>
 
   <!-- =========== Set 4 Digit PIN From ========== -->
-  <div class="container" id="setpinform" style="display: none">
+  <div class="container" id="setpinform" style="display: none; margin-top: 52px">
       <div align="center"> <span>Please Set 4 Digit PIN</span></div>
     <div class="form-group">
       <label for="loginpin"><span class="mandate">* </span> PIN</label>
-      <input type="number" class="form-control" id="loginpin" style="-webkit-text-security: disc;">
+      <input type="number" class="form-control" id="loginpin" onkeydown="if(event.key==='.'){console.log(event.key); event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');" style="-webkit-text-security: disc;" pattern="^[0-9]*$">
     </div>
     <div class="form-group">
       <label for="loginconfirmpin"><span class="mandate">* </span> Confirm - PIN</label>
-      <input type="number" class="form-control" id="loginconfirmpin" style="-webkit-text-security: disc;">
+      <input type="number" class="form-control" id="loginconfirmpin" onkeydown="if(event.key==='.'){console.log(event.key); event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');" style="-webkit-text-security: disc;" pattern="^[0-9]*$">
     </div>
     <div align="center">
       <button type="button" class="btn btn-default" id="setpinbutton">Continue</button>
@@ -90,12 +75,12 @@
   </div>
 
   <!-- ========== Login With PIN From ========= -->
-  <div class="container" id="enterpinform" style="display: none">
-     <div class="form-group" style="height:40px;"><img id="attendanceiconinpin" class="img-circle logicon" src="img/attendance.png" /></div>
+  <div class="container" id="enterpinform" style="display: none; margin-top: 52px">
+   
       <div align="center"> <span>Please Enter 4 Digit PIN</span></div>
     <div class="form-group">
       <label for="loginsetpin"> <span class="mandate">* </span> PIN</label>
-      <input type="number" class="form-control" id="loginsetpin" style="-webkit-text-security: disc;">
+      <input type="number" class="form-control" id="loginsetpin" onkeydown="if(event.key==='.'){console.log(event.key); event.preventDefault();}"  oninput="event.target.value = event.target.value.replace(/[^0-9]*/g,'');" style="-webkit-text-security: disc;" pattern="^[0-9]*$">
     </div>
     <div align="center">
       <button type="button" class="btn btn-default" id="enterpinbutton">Continue</button>
@@ -120,14 +105,13 @@
     </div>
   </div>
 
-  </body>
 <!-- partial -->
+<script src="js/aes.js"></script>
 <script src='js/popper.min.js'></script>
 <script src='js/bootstrap.min.js'></script>
 <script src='js/mdb.min.js'></script>
 <script src="js/indexpagevalidation.js"></script>
 <script src="js/indexpage.js"></script>
-<script src="js/appdata.js"></script>
 <script src="js/sync.js"></script>
 <script src="js/localdb.js"></script>
 <script type="application/javascript">
@@ -138,7 +122,36 @@
       var r = confirm("Do you want to Exit!");
       if (r == true){navigator.app.exitApp();}
     }
-    
+
+    $('input').bind("cut copy paste",function(e) {
+     e.preventDefault();
+ });
+
+  $('#loginsetpin').on("input", function(){
+    var input_val = $(this).val();
+    var inputRGEX = /^[0-9]*$/;
+    var inputResult = inputRGEX.test(input_val);
+      if(!(inputResult)) { this.value = this.value.replace(/[^0-9\s]/gi, ''); }
+      if(input_val.length>4){$(this).val($(this).val().substr(0, 4))}
+   });
+
+  $('#loginpin').on("input", function(){
+    var input_val = $(this).val();
+    var inputRGEX = /^[0-9]*$/;
+    var inputResult = inputRGEX.test(input_val);
+      if(!(inputResult)) { this.value = this.value.replace(/[^0-9\s]/gi, ''); }
+      if(input_val.length>4){$(this).val($(this).val().substr(0, 4))}
+   });
+
+    $('#loginconfirmpin').on("input", function(){
+    var input_val = $(this).val();
+    var inputRGEX = /^[0-9]*$/;
+    var inputResult = inputRGEX.test(input_val);
+      if(!(inputResult)) { this.value = this.value.replace(/[^0-9\s]/gi, ''); }
+      if(input_val.length>4){$(this).val($(this).val().substr(0, 4))}
+   });
+
+   
 </script>
 </body>
 </html>

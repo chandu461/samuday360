@@ -186,7 +186,7 @@ public class CordovaActivity extends Activity {
                 appView.getView().setBackgroundColor(backgroundColor);
             }
             catch (NumberFormatException e){
-                e.printStackTrace();
+                // e.printStackTrace();
             }
         }
 
@@ -268,9 +268,11 @@ public class CordovaActivity extends Activity {
         if (this.appView == null) {
             return;
         }
-        // Force window to have focus, so application always
-        // receive user input. Workaround for some devices (Samsung Galaxy Note 3 at least)
-        this.getWindow().getDecorView().requestFocus();
+        if (! this.getWindow().getDecorView().hasFocus()) {
+            // Force window to have focus, so application always
+            // receive user input. Workaround for some devices (Samsung Galaxy Note 3 at least)
+            this.getWindow().getDecorView().requestFocus();
+        }
 
         this.appView.handleResume(this.keepRunning);
     }
@@ -464,7 +466,7 @@ public class CordovaActivity extends Activity {
             try {
                 this.onReceivedError(d.getInt("errorCode"), d.getString("description"), d.getString("url"));
             } catch (JSONException e) {
-                e.printStackTrace();
+                // e.printStackTrace();
             }
         } else if ("exit".equals(id)) {
             finish();
@@ -511,7 +513,7 @@ public class CordovaActivity extends Activity {
         catch (JSONException e)
         {
             LOG.d(TAG, "JSONException: Parameters fed into the method are not valid");
-            e.printStackTrace();
+            // e.printStackTrace();
         }
 
     }

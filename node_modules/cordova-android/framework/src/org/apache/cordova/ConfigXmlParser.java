@@ -81,9 +81,9 @@ public class ConfigXmlParser {
             try {
                 eventType = xml.next();
             } catch (XmlPullParserException e) {
-                e.printStackTrace();
+                // e.printStackTrace();
             } catch (IOException e) {
-                e.printStackTrace();
+                // e.printStackTrace();
             }
         }
     }

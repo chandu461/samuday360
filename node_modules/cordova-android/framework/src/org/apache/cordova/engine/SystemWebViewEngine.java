@@ -113,7 +113,7 @@ public class SystemWebViewEngine implements CordovaWebViewEngine {
                 //sometimes this can be called after calling webview.destroy() on destroy()
                 //thus resulting in a NullPointerException
                 if(webView!=null) {
-                   webView.setNetworkAvailable(value); 
+                   webView.setNetworkAvailable(value);
                 }
             }
             @Override
@@ -226,7 +226,7 @@ public class SystemWebViewEngine implements CordovaWebViewEngine {
             WebView.setWebContentsDebuggingEnabled(true);
         } catch (IllegalArgumentException e) {
             LOG.d(TAG, "You have one job! To turn on Remote Web Debugging! YOU HAVE FAILED! ");
-            e.printStackTrace();
+            // e.printStackTrace();
         }
     }
 

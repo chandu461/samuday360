@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" >
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    
+    <title>samuday</title>
+   
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="fonts/font-awesome/css/font-awesome.min.css" media="all" >
+    <link href="css/mdb.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/common.css">
+    <script src='js/jquery.min.js'></script>
+    <script type="text/javascript" src="cordova.js"></script>
+
+  </head>
+  <body onload="verifyUser()" style="height: 100vh !important; background-image: url(img/bg.png);">
+    <main>
+
+      <nav class="navbar navbar-expand-lg navbar-dark" style="background:#0b70b3;padding-top: 0px;padding-bottom: 0px;">
+        <a class="navbar-brand" href="#"><img src="img/logo5.png" width="50%" style="height: 48px; width: 49px;"></a>
+        
+      </nav>                
+    </main>
+  <!-- ========== First Time Login Form ========== -->
+  <div class="container" id="loginform" style="display:none; margin-top: 52px">
+   <div class="form-group">
+      <label for="loginusername"><span class="mandate">* </span>Email ID</label>
+      <input type="email" class="form-control" id="loginusername" value="">
+    </div>
+    <div class="form-group">
+      <label for="loginpwd"> <span class="mandate">* </span> Password</label>
+      <input type="password" class="form-control" id="loginpwd" value="">
+    </div>
+    <div align="center">
+      <button type="button" class="btn btn-default" id="loginbutton">Login</button>
+    </div>
+
+  </div>
+  
+<div class="col-sm-12 col-md-12" style="background-image: url(img/bg.png); position: fixed; bottom: 5px; background-color: white;"><span>App Version 4.0.3v TWN</span></div>
+
+ <div class="container" id="verificationform" style="display: none">
+    <div class="form-group">
+      <label for="loginemail"> <span class="mandate">* </span> HCL E-Mail</label>
+      <input type="email" class="form-control" id="loginemail">
+    </div>
+    <div class="form-group">
+      <label for="loginmobile"> <span class="mandate">* </span> Mobile</label>
+      <input type="number" class="form-control" id="loginmobile">
+    </div>
+    
+    <div align="center">
+      <button type="button" class="btn btn-default" id="verificationmobilebutton">Verify</button>
+    </div>
+
+  </div>
+
+  <!-- =========== Set 4 Digit PIN From ========== -->
+  <div class="container" id="setpinform" style="display: none; margin-top: 52px">
+      <div align="center"> <span>Please Set 4 Digit PIN</span></div>
+    <div class="form-group">
+      <label for="loginpin"><span class="mandate">* </span> PIN</label>
+      <input type="number" class="form-control" id="loginpin" style="-webkit-text-security: disc;">
+    </div>
+    <div class="form-group">
+      <label for="loginconfirmpin"><span class="mandate">* </span> Confirm - PIN</label>
+      <input type="number" class="form-control" id="loginconfirmpin" style="-webkit-text-security: disc;">
+    </div>
+    <div align="center">
+      <button type="button" class="btn btn-default" id="setpinbutton">Continue</button>
+    </div>
+  </div>
+
+  <!-- ========== Login With PIN From ========= -->
+  <div class="container" id="enterpinform" style="display: none; margin-top: 52px">
+   
+      <div align="center"> <span>Please Enter 4 Digit PIN</span></div>
+    <div class="form-group">
+      <label for="loginsetpin"> <span class="mandate">* </span> PIN</label>
+      <input type="number" class="form-control" id="loginsetpin" style="-webkit-text-security: disc;">
+    </div>
+    <div align="center">
+      <button type="button" class="btn btn-default" id="enterpinbutton">Continue</button>
+    </div>
+    <div align="right">
+      <a href="#" id="resetpin" >Forgot PIN....?</a>
+    </div>
+
+  </div>
+
+
+
+<!-- =========== Attendance Form ========= -->
+<div class="container" id="attendanceform" style="display: none">
+      <div class="form-group" style="height:40px;"><img id="logginicon" class="img-circle logicon" src="img/login.png" /></div>
+    <div class="form-group">
+      <label for="attendanceempid"><span class="mandate">* </span> Employee ID</label>
+      <input type="text" class="form-control" id="attendanceempid" >
+    </div>
+    <div align="center">
+      <button type="button" class="btn btn-default" id="attendancebutton">Turn Up</button>
+    </div>
+  </div>
+
+<!-- partial -->
+<script src="js/aes.js"></script>
+<script src='js/popper.min.js'></script>
+<script src='js/bootstrap.min.js'></script>
+<script src='js/mdb.min.js'></script>
+<script src="js/indexpagevalidation.js"></script>
+<script src="js/indexpage.js"></script>
+<script src="js/sync.js"></script>
+<script src="js/localdb.js"></script>
+<script type="application/javascript">
+    document.addEventListener("backbutton", onBackKeyDown, false);
+    function onBackKeyDown(e)
+    {
+      e.preventDefault();
+      var r = confirm("Do you want to Exit!");
+      if (r == true){navigator.app.exitApp();}
+    }
+
+    $('input').bind("cut copy paste",function(e) {
+     e.preventDefault();
+ });
+   
+</script>
+</body>
+</html>

@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" >
   <head>
-    <meta charset="UTF-8">
-    <title>samuday</title>
+     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>samuday</title>
     <link rel="stylesheet" type="text/css" href="css/filterdropdownmultiple.css">
     <link rel="stylesheet" href="fonts/font-awesome/css/font-awesome.min.css" media="all" >
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
@@ -12,12 +15,14 @@
     <link rel="stylesheet" href="css/common.css">
     <script src='js/jquery.min.js'></script>
     <script type="text/javascript" src="cordova.js"></script>
-    <!-- <link rel="stylesheet" href="css/calendar.css"> -->
     <style type="text/css">
       
-      .card{
-            height: 83px;
-      }
+      /*.card{
+            height: 93px;
+      }*/
+       .card {
+        height: auto;
+     }
       .card p {
         margin-bottom: 0px !important;
       }
@@ -35,24 +40,10 @@
 
       <nav class="navbar navbar-expand-lg navbar-dark" style="background:#0b70b3;padding-top: 0px;padding-bottom: 0px;">
         <a class="navbar-brand" href="#"><img src="img/logo5.png" width="50%" style="height: 48px; width: 49px;"></a>
-          <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button> -->
           <h6 class="pagetitle">Baseline Beneficiary</h6>
           <span></span>
-          <!-- <span class="fa fa-power-off" aria-hidden="true" onclick="logout()" style="color: #f2f2f2; "></span> -->
-
       </nav>                
-     <!--  <div class="collapse navbar-collapse" id="navbarText" style="background:cornflowerblue">
-        <ul class="navbar-nav mr-auto" style="padding: 15px;">
-            
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="attendance">Login</a>
-                
-            </li> 
-        </ul>
-        
-    </div>    -->
+    
   </main>
 
 
@@ -65,14 +56,15 @@
        <ul class="dropdown-menu dropdown-menu-right searchicon">
           <div class="searchdiv">
             <input class="form-control searchinput" id="searchinput"/>
-            <button class="btn btn-default fa fa-search searchbtn" onClick="searchbenf('0')"></button>
+            <button class="btn btn-default fa fa-search searchbtn" onClick="filterApply('0')"></button>
+            <!-- searchbenf('0')  -->
           </div>
         </ul>
     </span>
 
     <span onClick="userFilter()" class="fa fa-filter"></span>
     <span onClick="blloadsettings()" class="fa fa-sliders"></span>
-    <span onClick="userSync()" class="fa fa-refresh"></span>
+    <span onClick="usertoolbarsync()" class="fa fa-refresh"></span>
     <span onClick="userRefresh()" class="fa fa-compress"></span>
     <!-- <span class="fa fa-calendar" id="calendarbtn" ></span> -->
     <span onClick="movetohome()" class="fa fa-home"></span>
@@ -182,8 +174,7 @@
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
-        <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
-        <h4 class="modal-title">List Of Beneficiaries</h4>
+        <h4 class="modal-title">List Of Members</h4>
       </div>
       <div class="modal-body" Id="mapviewclickedbenfd" style="overflow: scroll;">
 
@@ -206,7 +197,6 @@
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
-        <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
         <h4 class="modal-title">Details</h4>
       </div>
       <div class="modal-body">
@@ -219,6 +209,7 @@
             <tr><td>Occupation</td><td><span id="beneficiaryoccupation"></span></td></tr>
             <tr><td>HOH Name</td><td><span id="beneficiaryhohname"></span></td></tr>
             <tr><td>Relation</td><td><span id="beneficiaryrelation"></span></td></tr>
+            <tr><td>Building Type</td><td><span id="beneficiarybuildingtype"></span></td></tr>
             <tr><td>Village</td><td><span id="beneficiaryvillage"></span></td></tr>
             <tr><td>GP</td><td><span id="beneficiarygp"></span></td></tr>
             <tr><td>Block</td><td><span id="beneficiaryblock"></span></td></tr>
@@ -235,6 +226,38 @@
 
 
 
+<!-- View Beneficiary DATA FROM map single view -->
+<div id="mapdetailmodal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Details</h4>
+      </div>
+      <div class="modal-body">
+          
+          <table class="table">
+            <tr><th>HH Code</th><td><span id="mapbeneficiaryhhcode"></span></td></tr>
+            <tr><th>Name</th><td><span id="mapbeneficiaryname"></span></td></tr>
+            <tr><th>Gender</th><td><span id="mapbeneficiarygender"></span></td></tr>
+            <tr><th>DOB</th><td><span id="mapbeneficiarybod"></span></td></tr>
+            <tr><th>Occupation</th><td><span id="mapbeneficiaryoccupation"></span></td></tr>
+            <tr><th>HOH Name</th><td><span id="mapbeneficiaryhohname"></span></td></tr>
+            <tr><th>Relation</th><td><span id="mapbeneficiaryrelation"></span></td></tr>
+            <tr><th>Building Type</th><td><span id="mapbeneficiarybuildingtype"></span></td></tr>
+            <tr><th>Village</th><td><span id="mapbeneficiaryvillage"></span></td></tr>
+            <tr><th>GP</th><td><span id="mapbeneficiarygp"></span></td></tr>
+            <tr><th>Block</th><td><span id="mapbeneficiaryblock"></span></td></tr>
+          </table>
+
+      </div>
+      <div class="modal-footer" id="mapviewbtns">
+      </div>
+    </div>
+
+  </div>
+</div>
 
 
 
@@ -246,51 +269,68 @@
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
-        <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+
         <h4 class="modal-title">Filter</h4>
       </div>
       <div class="modal-body">
           
-          <div class="container" id="surveyform">
-            <div class="form-group" hidden="true">
-              <label for="block">Block</label>
-              <select id="block" class="form-control" multiple="multiple">
-              </select>
-            </div>
-
-            <div class="form-group" hidden="true">
-              <label for="filtergp">GP</label>
-              <select type="text" class="form-control" id="filtergp"  multiple="multiple">
-              </select>
-            </div>
-            <div class="form-group" hidden="true">
-              <label for="filtervillage">Village</label>
-              <select type="text" class="form-control" id="filtervillage"  multiple="multiple">
-
-              </select>
-            </div>
-
-            <div class="form-group" hidden="true">
-              <label for="buildingtype">Building Type</label>
-              <select id="buildingtype" class="form-control" multiple="multiple">
-
-              </select>
-            </div>
-
-           <div class="form-group">
-              <label for="name">Sort By</label>
-              <select type="text" class="form-control" id="filterorderby">
-                  <option value="block"> Block </option>
-                  <option value="grampanchayat">GP</option>
-                  <option value="village">Village</option>
-                  <!-- <option value="status"> Survey Status</option> -->
-                  <option value="resondantcode">HH Code</option>
-              </select>
-            </div>
-
-
+        <div class="container" id="surveyform">
+          <div class="form-group" hidden="true">
+            <label for="block">Block</label>
+            <select id="block" class="form-control" multiple="multiple">
+            </select>
           </div>
 
+          <div class="form-group" hidden="true">
+            <label for="filtergp">GP</label>
+            <select type="text" class="form-control" id="filtergp"  multiple="multiple">
+            </select>
+          </div>
+          <div class="form-group" hidden="true">
+            <label for="filtervillage">Village</label>
+            <select type="text" class="form-control" id="filtervillage"  multiple="multiple">
+
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="buildingtype">Building Type</label>
+            <select id="buildingtype" class="form-control" multiple="multiple">
+
+            </select>
+          </div>
+
+          <div class="form-group" style="display: none">
+            <label for="name">Sort By</label>
+            <select type="text" class="form-control" id="filterorderby">
+              <option value="block"> Block </option>
+              <option value="grampanchayat">GP</option>
+              <option value="village">Village</option>
+              <!-- <option value="status"> Survey Status</option> -->
+              <option value="resondantcode">HH Code</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="name">Member Type</label>
+            <select type="text" class="form-control" id="filtermember">
+              <option value="ALL">ALL</option>
+              <option value="HOH">HOH</option>
+              <option value="NONHOH">Non HOH</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="name">Gender</label>
+            <select type="text" class="form-control" id="filtergender">
+              <option value=""></option>
+              <option value="MALE">Male</option>
+              <option value="FEMALE">Female</option>
+              <option value="NA">N.A</option>
+            </select>
+          </div>
+          
+</div>
       </div>
       <div class="modal-footer" align="center">
         <button type="button" class="btn btn-success" onClick="filterApply('0')" data-dismiss="modal">Apply</button>
@@ -309,7 +349,6 @@
 
 
 
-
 <!-- Filter Modal -->
 <div id="loadbenfmodal" class="modal fade" role="dialog">
   <div class="modal-dialog">
@@ -317,8 +356,7 @@
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
-        <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
-        <h4 class="modal-title">Beneficiary Load Filter</h4>
+        <h4 class="modal-title">Filter</h4>
       </div>
       <div class="modal-body">
           
@@ -354,7 +392,33 @@
 </div>
 
 
+<!-- Modal -->
+<div class="modal fade" id="loginmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Login</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="exampleInputEmail1">User ID</label>
+          <input type="email" class="form-control" id="loginusername">
+        </div>
+        <div class="form-group">
+          <label for="exampleInputPassword1">Password</label>
+          <input  type="password" class="form-control" id="loginpwd">
+        </div>
 
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" id="loginbutton">Login</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 
@@ -366,6 +430,8 @@
 <script src="js/ol.js"></script>
 <script src="js/surveybeneficiarymap.js"></script>
 <script src="js/localdb.js"></script>
+<script src="js/indexpagevalidation.js"></script>
+<script src="js/samudaypagelogin.js"></script>
 <script src="js/surveybeneficiary.js"></script>
 <script src="js/tabview.js"></script>
 <script src="js/toolbaraction.js"></script>
@@ -378,6 +444,8 @@
 
 <script type="text/javascript">
 
+  //$("#loginusername").val(CryptoJS.AES.decrypt(localStorage.email, localStorage.employeeid).toString(CryptoJS.enc.Utf8).slice(1,-1));
+  
   document.addEventListener("backbutton", onBackKeyDown, false);
   function onBackKeyDown(e)
   {
@@ -393,54 +461,96 @@
 
   function detailsModal(index)
   {
-    boddate=new Date(blitems[index].dateofbirth);
-    $("#beneficiaryhhcode").html(blitems[index].housecode);
-    $("#beneficiaryname").html(blitems[index].respondantname);
-    $("#beneficiarygender").html(blitems[index].gender);
-    $("#beneficiarybod").html(boddate.getDate() +"-"+boddate.getMonth() +"-"+boddate.getFullYear());
-    $("#beneficiaryoccupation").html(blitems[index].occupation);
-    $("#beneficiaryhohname").html(blitems[index].hohname);
-    $("#beneficiaryrelation").html(blitems[index].relationwithhoh);
-    $("#beneficiaryvillage").html(blitems[index].village);
-    $("#beneficiarygp").html(blitems[index].grampanchayat);
-    $("#beneficiaryblock").html(blitems[index].block);
+    rootdetection.isDeviceRooted(function (result) {
+    if(result==0)
+    {
+        var dob="";
+        if(blitems[index].dateofbirth!="")
+        {
+          var boddate=new Date(blitems[index].dateofbirth);
+          var date=boddate.getDate();
+          var month=boddate.getMonth();
+          var year=boddate.getFullYear();
+          dob= date+"-"+month+"-"+year;
+        }
 
-    $("#detailmodal").modal("show");
+        $("#beneficiaryhhcode").html(blitems[index].housecode);
+        $("#beneficiaryname").html(blitems[index].respondantname);
+        $("#beneficiarygender").html(blitems[index].gender);
+        $("#beneficiarybod").html(dob);
+        $("#beneficiaryoccupation").html(blitems[index].occupation);
+        $("#beneficiaryhohname").html(blitems[index].hohname);
+        $("#beneficiaryrelation").html(blitems[index].relationwithhoh);
+        $("#beneficiarybuildingtype").html(blitems[index].buildingtype);
+        $("#beneficiaryvillage").html(blitems[index].village);
+        $("#beneficiarygp").html(blitems[index].grampanchayat);
+        $("#beneficiaryblock").html(blitems[index].block);
+
+        $("#detailmodal").modal("show");
+      }else{navigator.notification.alert("Device doesn't Support", function(){}, 'Samuday 360','Done');}
+    }, function (error) {navigator.notification.alert("Device doesn't Support", function(){}, 'Samuday 360','Done');});
   }
 
+function mapdetailsModal(index)
+{
+  rootdetection.isDeviceRooted(function (result) {
+    if(result==0)
+    {
+      boddate=new Date(blitems[index].dateofbirth);
+      $("#mapbeneficiaryhhcode").html(blitems[index].housecode);
+      $("#mapbeneficiaryname").html(blitems[index].respondantname);
+      $("#mapbeneficiarygender").html(blitems[index].gender);
+      $("#mapbeneficiarybod").html(boddate.getDate() +"-"+boddate.getMonth() +"-"+boddate.getFullYear());
+      $("#mapbeneficiaryoccupation").html(blitems[index].occupation);
+      $("#mapbeneficiaryhohname").html(blitems[index].hohname);
+      $("#mapbeneficiaryrelation").html(blitems[index].relationwithhoh);
+      $("#mapbeneficiarybuildingtype").html(blitems[index].buildingtype);
+      $("#mapbeneficiaryvillage").html(blitems[index].village);
+      $("#mapbeneficiarygp").html(blitems[index].grampanchayat);
+      $("#mapbeneficiaryblock").html(blitems[index].block);
 
-  function viewbnfonmap(index)
-  {
-    SpinnerDialog.show("Samuday 360", "Locating Beneficiary...", true);
-    format = new ol.format.WKT();
-    vector.getSource().clear();
-    featureGeom = format.readFeature(blitems[index].geom,{ dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857'});
-    featureGeom.setStyle(new ol.style.Style
-    ({
-        fill: new ol.style.Fill
-        ({color: 'rgba(11, 112, 179, 0.2)'}),
-        stroke: new ol.style.Stroke
-        ({color: '#0b70b3',width: 2}),
-        image: new ol.style.Circle
-        ({radius: 7,fill: new ol.style.Fill({color: '#da965e'})})
-    }));
-    vector.getSource().addFeature(featureGeom);
-    map.getView().fit(featureGeom.getGeometry().getExtent(), map.getSize());
+      $("#mapdetailmodal").modal("show");
+    }else{navigator.notification.alert("Device doesn't Support", function(){}, 'Samuday 360','Done');}
+  }, function (error) {navigator.notification.alert("Device doesn't Support", function(){}, 'Samuday 360','Done');});
+}
 
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-      tabcontent[i].style.display = "none";
-    }
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-      tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-    document.getElementById('surveybeneficiarymap').style.display = "block";
-    document.getElementById("mapviewbtn").classList.add("active");
-    //evt.currentTarget.className += " active";
-    SpinnerDialog.hide();
-  }
+function viewbnfonmap(index)
+{
+    rootdetection.isDeviceRooted(function (result) {
+      if(result==0)
+      {
+        SpinnerDialog.show("Samuday 360", "Locating Beneficiary...", true);
+        format = new ol.format.WKT();
+        vector.getSource().clear();
+        featureGeom = format.readFeature(blitems[index].geom,{ dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857'});
+        featureGeom.setStyle(new ol.style.Style
+        ({
+            fill: new ol.style.Fill
+            ({color: 'rgba(11, 112, 179, 0.2)'}),
+            stroke: new ol.style.Stroke
+            ({color: '#0b70b3',width: 2}),
+            image: new ol.style.Circle
+            ({radius: 7,fill: new ol.style.Fill({color: '#da965e'})})
+        }));
+        vector.getSource().addFeature(featureGeom);
+        map.getView().fit(featureGeom.getGeometry().getExtent(), map.getSize());
+
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+          tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+          tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById('surveybeneficiarymap').style.display = "block";
+        document.getElementById("mapviewbtn").classList.add("active");
+        //evt.currentTarget.className += " active";
+        SpinnerDialog.hide();
+      }else{navigator.notification.alert("Device doesn't Support", function(){}, 'Samuday 360','Done');}
+    }, function (error) {navigator.notification.alert("Device doesn't Support", function(){}, 'Samuday 360','Done');});
+}
 </script>
 
 </body>

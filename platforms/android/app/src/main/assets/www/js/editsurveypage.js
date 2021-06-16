@@ -38,7 +38,6 @@ function count()
 	{
 		if($("#"+loop).val()!=""){
 			answercount++;
-			//console.log(answercount);
 		}
 	}
 	return answercount;
@@ -54,8 +53,6 @@ function surveyQuestionshtml()
 {
 
 	surveyresponsesavetype="";
-	// optionQuestions
-	// questionsOptions
 
 	tabbtn="";
 	for(sectionbtnloop=0; sectionbtnloop<surveysections.length; sectionbtnloop++)
@@ -218,25 +215,13 @@ $(".err").html("");
 surveyresponsesavetype=2;
 surveyparentresponse=[];
 surveychildresponse=[];
-// optionQuestions=[]; // questions having options
-// questionsOptions=[]; // Option of questions in optionQuestions
-
-// surveyquestions=[]; // Collection of questions (with all info required)
-// surveyquestionnumber=[]; // Collection of questions (with only question number)
-// onlyparentquestions=[]; // Collection of Parent questions (with only question number)
-// surveysections=[]; // Question Section name
-
-
-// childparentquestion=[];  //Collection of Parent Questions
-// childquestions=[]; // Collection of child questions
-// childquestionconditions=[]; //Collection of condition for child questions
 
 	try
 	{
 		for(parentloop=0; parentloop<onlyparentquestions.length; parentloop++)
 		{
-			surveyworkitemmappingcode=CryptoJS.AES.decrypt(localStorage.surveyworkitemmappingcode, "Samuday360").toString(CryptoJS.enc.Utf8).slice(1,-1);
-			respondantcode=CryptoJS.AES.decrypt(localStorage.respondantcode, "Samuday360").toString(CryptoJS.enc.Utf8).slice(1,-1);
+			surveyworkitemmappingcode=CryptoJS.AES.decrypt(localStorage.surveyworkitemmappingcode, localStorage.employeeid).toString(CryptoJS.enc.Utf8).slice(1,-1);
+			respondantcode=CryptoJS.AES.decrypt(localStorage.respondantcode, localStorage.employeeid).toString(CryptoJS.enc.Utf8).slice(1,-1);
 			parent=surveyquestions[surveyquestionnumber.indexOf(onlyparentquestions[parentloop])]
 
 			errid=parent[0];
@@ -282,7 +267,8 @@ surveychildresponse=[];
 								if(isNaN(validquestionanswer)){throw questionsvalidation[validindex][validloop].violationmessage}
 							}
 							else if(questionvalids=="Decimal"){
-
+								if((!validquestionanswer.length - validquestionanswer.indexOf(".") -1)>parseInt(questionsvalidation[validindex][validloop].allowedvalues))
+								{throw questionsvalidation[validindex][validloop].violationmessage}
 							}
 							else if(questionvalids=="Range"){
 								var valrange=questionsvalidation[validindex][validloop].allowedvalues.split("-");
@@ -310,17 +296,7 @@ surveychildresponse=[];
 					}
 				}
 				
-				// if(parent[3]==2 || parent[3]==3 || parent[3]==4)
-				// {
-				// 	if(parentcheckedvalues.lenght>0){ }else{break;navigator.notification.alert("Please Select "+parent[1], function(){}, 'Samuday 360','Done');}
-				// }
-				// else if(parent[3]==8 )
-				// {
-				// 	if(parentcheckedvalues.lenght>0){ }else{break;navigator.notification.alert("Please Select "+parent[1], function(){}, 'Samuday 360','Done');}
-				// }
-				// else{
-				// 	if(document.getElementById(parent[0]).value!=""){ }else{break; navigator.notification.alert("Please Select "+parent[1], function(){}, 'Samuday 360','Done');}
-				// }
+				
 			}
 
 			childparentquestionindex=childparentquestion.indexOf(parent[0])
@@ -339,7 +315,7 @@ surveychildresponse=[];
 	  	$("#"+errid).focus();
 
 	  	//console.log(err);
-	  	//navigator.notification.alert(err, function(){}, 'Samuday 360','Done');
+	  	navigator.notification.alert(err, function(){}, 'Samuday 360','Done');
 	}
 }
 
@@ -404,14 +380,10 @@ function childvalidation(parentindex, parentquestiontype)
 				{
 
 
-					// validationsdistquestions
-					// questionsvalidation
-					//console.log(validationsdistquestions);
 					var validindex=validationsdistquestions.indexOf(child[0])
-					// console.log(validindex);
-
+					
 					if(validindex>=0)
-					{//console.log(questionsvalidation[validindex]);
+					{
 						for(validloop=0; validloop<questionsvalidation[validindex].length; validloop++)
 						{
 							questionvalids=questionsvalidation[validindex][validloop].validationtypename;
@@ -422,7 +394,8 @@ function childvalidation(parentindex, parentquestiontype)
 									if(!isNaN(validquestionanswer)){throw questionsvalidation[validindex][validloop].violationmessage}
 								}
 								else if(questionvalids=="Decimal"){
-
+									if((!validquestionanswer.length - validquestionanswer.indexOf(".") -1)>parseInt(questionsvalidation[validindex][validloop].allowedvalues))
+									{throw questionsvalidation[validindex][validloop].violationmessage}
 								}
 								else if(questionvalids=="Range"){
 									var valrange=questionsvalidation[validindex][validloop].allowedvalues.split("-");
@@ -450,18 +423,6 @@ function childvalidation(parentindex, parentquestiontype)
 						}
 					}
 
-
-					// if(child[3]==2 || child[3]==3 || child[3]==4)
-					// {
-					// 	if(parentcheckedvalues.lenght>0){ }else{break; navigator.notification.alert("Please Select "+child[1], function(){}, 'Samuday 360','Done');}
-					// }
-					// else if(child[3]==8 )
-					// {
-					// 	if(parentcheckedvalues.lenght>0){ }else{break; navigator.notification.alert("Please Select "+child[1], function(){}, 'Samuday 360','Done');}
-					// }
-					// else{
-					// 	if(document.getElementById(child[0]).value!=""){ }else{break; navigator.notification.alert("Please Enter "+child[1], function(){}, 'Samuday 360','Done');}
-					// }
 				}
 			}
 		}
@@ -481,25 +442,13 @@ function savesurvey()
 surveyresponsesavetype=1;
 surveyparentresponse=[];
 surveychildresponse=[];
-// optionQuestions=[]; // questions having options
-// questionsOptions=[]; // Option of questions in optionQuestions
-
-// surveyquestions=[]; // Collection of questions (with all info required)
-// surveyquestionnumber=[]; // Collection of questions (with only question number)
-// onlyparentquestions=[]; // Collection of Parent questions (with only question number)
-// surveysections=[]; // Question Section name
-
-
-// childparentquestion=[];  //Collection of Parent Questions
-// childquestions=[]; // Collection of child questions
-// childquestionconditions=[]; //Collection of condition for child questions
 
 	try
 	{
 		for(parentloop=0; parentloop<onlyparentquestions.length; parentloop++)
 		{
-			surveyworkitemmappingcode=CryptoJS.AES.decrypt(localStorage.surveyworkitemmappingcode, "Samuday360").toString(CryptoJS.enc.Utf8).slice(1,-1);
-			respondantcode=CryptoJS.AES.decrypt(localStorage.respondantcode, "Samuday360").toString(CryptoJS.enc.Utf8).slice(1,-1);
+			surveyworkitemmappingcode=CryptoJS.AES.decrypt(localStorage.surveyworkitemmappingcode, localStorage.employeeid).toString(CryptoJS.enc.Utf8).slice(1,-1);
+			respondantcode=CryptoJS.AES.decrypt(localStorage.respondantcode, localStorage.employeeid).toString(CryptoJS.enc.Utf8).slice(1,-1);
 			parent=surveyquestions[surveyquestionnumber.indexOf(onlyparentquestions[parentloop])]
 
 			errid=parent[0];
@@ -527,14 +476,10 @@ surveychildresponse=[];
 			if(parent[6]!=0)
 			{
 
-				// validationsdistquestions
-				// questionsvalidation
-				//console.log(validationsdistquestions);
 				var validindex=validationsdistquestions.indexOf(parent[0])
-				// console.log(validindex);
-
+				
 				if(validindex>=0)
-				{//console.log(questionsvalidation[validindex]);
+				{
 					for(validloop=0; validloop<questionsvalidation[validindex].length; validloop++)
 					{
 						questionvalids=questionsvalidation[validindex][validloop].validationtypename;
@@ -572,18 +517,6 @@ surveychildresponse=[];
 						// console.log(questionsvalidation[validindex][validloop]);
 					}
 				}
-				
-				// if(parent[3]==2 || parent[3]==3 || parent[3]==4)
-				// {
-				// 	if(parentcheckedvalues.lenght>0){ }else{break;navigator.notification.alert("Please Select "+parent[1], function(){}, 'Samuday 360','Done');}
-				// }
-				// else if(parent[3]==8 )
-				// {
-				// 	if(parentcheckedvalues.lenght>0){ }else{break;navigator.notification.alert("Please Select "+parent[1], function(){}, 'Samuday 360','Done');}
-				// }
-				// else{
-				// 	if(document.getElementById(parent[0]).value!=""){ }else{break; navigator.notification.alert("Please Select "+parent[1], function(){}, 'Samuday 360','Done');}
-				// }
 			}
 
 			childparentquestionindex=childparentquestion.indexOf(parent[0])
@@ -601,8 +534,7 @@ surveychildresponse=[];
       	$("#"+errid+"err").html(err);
 	  	$("#"+errid).focus();
 
-	  	//console.log(err);
-	  	//navigator.notification.alert(err, function(){}, 'Samuday 360','Done');
+	  	navigator.notification.alert(err, function(){}, 'Samuday 360','Done');
 	}
 
 }
@@ -662,20 +594,14 @@ function saveChildValidation(parentindex, parentquestiontype)
 				else{ surveychildresponse.push([surveyworkitemmappingcode, respondantcode, child[0], child[0], document.getElementById(child[0]).value, child[9]]);}
 
 
-
 				
 				if(child[6]!=0)
 				{
 
-
-					// validationsdistquestions
-					// questionsvalidation
-					//console.log(validationsdistquestions);
 					var validindex=validationsdistquestions.indexOf(child[0])
-					// console.log(validindex);
-
+					
 					if(validindex>=0)
-					{//console.log(questionsvalidation[validindex]);
+					{
 						for(validloop=0; validloop<questionsvalidation[validindex].length; validloop++)
 						{
 							questionvalids=questionsvalidation[validindex][validloop].validationtypename;
@@ -710,22 +636,9 @@ function saveChildValidation(parentindex, parentquestiontype)
 								}
 							}
 							else{throw questionsvalidation[validindex][validloop].violationmessage;}
-							// console.log(questionsvalidation[validindex][validloop]);
+							
 						}
 					}
-
-
-					// if(child[3]==2 || child[3]==3 || child[3]==4)
-					// {
-					// 	if(parentcheckedvalues.lenght>0){ }else{break; navigator.notification.alert("Please Select "+child[1], function(){}, 'Samuday 360','Done');}
-					// }
-					// else if(child[3]==8 )
-					// {
-					// 	if(parentcheckedvalues.lenght>0){ }else{break; navigator.notification.alert("Please Select "+child[1], function(){}, 'Samuday 360','Done');}
-					// }
-					// else{
-					// 	if(document.getElementById(child[0]).value!=""){ }else{break; navigator.notification.alert("Please Enter "+child[1], function(){}, 'Samuday 360','Done');}
-					// }
 				}
 			}
 		}
@@ -734,7 +647,3 @@ function saveChildValidation(parentindex, parentquestiontype)
 
 
 //  ========   Save Ends ===========
-
-
-
-

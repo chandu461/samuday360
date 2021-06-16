@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" >
   <head>
-    <meta charset="UTF-8">
-    <title>samuday</title>
+     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>samuday</title>
     <link rel="stylesheet" href="fonts/font-awesome/css/font-awesome.min.css" media="all" >
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <link href="css/mdb.min.css" rel="stylesheet">
@@ -20,29 +23,83 @@
       .btn.disabled, .btn:disabled {
           opacity: .35;
       }
+      
+      .bg-primary-v1{
+        padding:5px;
+        background:#136fb1;
+        border-radius:25px;
+        margin:5px 0 0;
+        height:35px;
+        width:35px;
+        display:inline-block;
+      }
+      .bg-primary-v1 i{display:inline-block;font-size:16px;}
+      .card-v{
+        background-color: #fff;
+        background-clip: border-box;
+        border: 1px solid rgba(0,0,0,.125);
+        border-radius: .25rem;
+        margin:5px 2.5px;
+        max-width: 90px;
+        min-width: 70px;
+        margin: 0 auto;
+      }
+      .text-v span{
+        margin:4px;
+        display: block;
+
+      }
+      @media (max-width:768px){
+        .text-v{
+          font-size: 10px;
+          word-break: break-all;
+          font-weight:600;
+          line-height: 1.2!important;
+        }
+        .bg-primary-v1 {
+          padding: 1px;
+          background: #136fb1;
+          border-radius: 25px;
+          margin: 5px 0 0;
+          height: 35px;
+          width: 35px;
+          display: inline-block;
+        }
+      }     
+      @media (max-width:400px){
+        .card-v{
+          min-width:70px;
+        }
+      }     
+      @media (max-width:380px){
+        .card-v{
+          min-width:65px;
+        }
+      }     
+      @media (max-width:350px){
+        .card-v{
+          min-width:52px;
+        }
+      }     
+      @media (max-width:325px){
+        .card-v{
+          min-width:48px;
+        }
+      }     
+      @media (max-width:300px){
+        .card-v{
+          min-width:46px;
+        }
+      }
     </style>
   </head>
   <body onload="getWorkItemDetails()">
     <main>
       <nav class="navbar navbar-expand-lg navbar-dark" style="background:#0b70b3;padding-top: 0px;padding-bottom: 0px;">
         <a class="navbar-brand" href="#"><img src="img/logo5.png" width="50%" style="height: 48px; width: 49px;"></a>
-          <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button> -->
           <h6 class="pagetitle">Monitoring</h6>
           <span></span>
-        <!-- <span class="fa fa-power-off" aria-hidden="true" onclick="logout()" style="color: #f2f2f2; "></span> -->
       </nav>                
-     <!--  <div class="collapse navbar-collapse" id="navbarText" style="background:cornflowerblue">
-        <ul class="navbar-nav mr-auto" style="padding: 15px;">
-            
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="attendance">Login</a>
-                
-            </li> 
-        </ul>
-        
-    </div>    -->
   </main>
 
   <div class="toolbar">
@@ -50,7 +107,7 @@
     <span onclick="logout()" class="fa fa-power-off"></span>
     <a href="#" onClick="userNotification()" class="fa fa-bell"></a>
     <!-- <a href="#" onClick="userFilter()" class="fa fa-filter"></a> -->
-    <a href="#" onClick="userSync()" class="fa fa-refresh"></a>
+    <a href="#" onClick="usertoolbarsync()" class="fa fa-refresh"></a>
     <a href="#" onClick="userRefresh()" class="fa fa-compress"></a>
     <span class="fa fa-calendar" id="calendarbtn" ></span>
     <span onClick="movetohome()" class="fa fa-home"></span>
@@ -70,9 +127,12 @@
         <tr><th>Work Item Type</th><td><span id="WorkItemTypespan"></span></td></tr>
         <tr><th>Plan Start Date</th><td><span id="PlanStartDatespan"></span></td></tr>
         <tr><th>Plan End Date</th><td><span id="PlanEndDatespan"></span></td></tr>
+        <tr><th>Actual Start Date</th><td><span id="Actualstartdate"></span></td></tr>
         <tr><th>Primary Owner</th><td><span id="PrimaryOwnerspan"></span></td></tr>
-        <tr><th>Target</th><td><span id="Targetspan"></span></td></tr>
+        <tr style="display: none"><th>Target</th><td><span id="Targetspan"></span></td></tr>
         <tr><th>Project Manager</td><td><span id="CreatedByspan"></span></td></tr>
+        <tr><th>Total Members</th><td><span id="totaltargetcount"></span></td></tr>
+        <!-- <tr style="display:none" ><th>Total Open</th><td><span id="totalopencount"></span></td></tr> -->
       </tbody>
     </table>
 
@@ -82,35 +142,27 @@
     <div class="col-sm-12 card odd" style="height: 340px;" >
       <div class="card-body">
         <h6 class="card-title" id="surveyname"></h6>
-        <span class="fa fa-download" id="downloadben" style="margin-top: -29px; display:none;" onclick="downloaddata()"></span>
+        <span class="fa fa-download" id="downloadben" style="margin-top: -29px; display:none;" onclick="downloaddataloginform()"></span>
         <p class="card-text" style="font-style: italic;" id="surveylocations"></p>
-        <table class="table table-bordered surveystatus">
-          <thead>
-            <tr>
-              <th>Target</th>
-              <th>Open</th>
-              <th>Inprogress</th>
-              <th>Submited</th>
-              <th>Synced</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td id="targetcount"></td>
-              <td id="opencount"></td>
-              <td id="inprogresscount"></td>
-              <td id="submitedcount"></td>
-              <td id="syncedcount"></td>
-            </tr>
-            <tr>
-              <td id="totaltargetcount"></td>
-              <td id="totalopencount"></td>
-              <td id="totalinprogresscount"></td>
-              <td id="totalsubmitedcount"></td>
-              <td id="totalsyncedcount"></td>
-            </tr>
-          </tbody>
-        </table>
+        
+    <div class="row justify-content-center">
+      <div class="card-v text-center">
+        <div class="bg-primary-v1"><i class="fa fa-user-plus text-white"></i></div><div class="text-v"> Mapped <span id="targetcount"></span></div>
+      </div>
+      <div class="card-v text-center">
+        <div class="bg-primary-v1"><i class="fa fa-folder-open text-white"></i></div><div class="text-v"> Open <span id="totalopencount"> </span></div>
+      </div>
+      <div class="card-v text-center">
+        <div class="bg-primary-v1"><i class="fa fa-envelope-open-o text-white"></i></div><div class="text-v"> Inprogress <span id="totalinprogresscount"> </span></div>
+      </div>
+      <div class="card-v text-center">
+        <div class="bg-primary-v1"><i class="fa fa-envelope text-white"></i></div><div class="text-v"> Submited <span id="totalsubmitedcount"> </span></div>
+      </div>
+      <div class="card-v text-center">
+        <div class="bg-primary-v1"><i class="fa fa-retweet text-white"></i></div><div class="text-v"> Synced <span id="totalsyncedcount"> </span></div>
+      </div>
+    </div>
+
 
         <div align="center">
 
@@ -161,9 +213,9 @@
           <table class="table">
             <tr><th>Survey Name</th><td><span id="surveynamemodal"></span></td></tr>
             <tr><th>Survey Desc</th><td><span id="surveydescmodal"></span></td></tr>
-            <tr><th>Sector Code</th><td><span id="sectorcodemodal"></span></td></tr>
-            <tr><th>Program Code</th><td><span id="programcodemodal"></span></td></tr>
-            <tr><th>Intervention Code</th><td><span id="intervensioncodemodal"></span></td></tr>
+            <tr><th>Sector </th><td><span id="sectorcodemodal"></span></td></tr>
+            <tr><th>Program </th><td><span id="programcodemodal"></span></td></tr>
+            <tr><th>Intervention </th><td><span id="intervensioncodemodal"></span></td></tr>
             <tr><th>Project Manager</th><td><span id="createdbymodal"></span></td></tr>
             <tr><th>Created On</th><td><span id="createdonmodal"></span></td></tr>
             <tr><th>Type </th><td><span id="typemodal"></span></td></tr>
@@ -236,9 +288,34 @@
 
 
 
+<!-- Modal -->
+<div class="modal fade" id="loginmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Login</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="loginusername">User ID</label>
+          <input type="email" class="form-control" id="loginusername">
+        </div>
+        <div class="form-group">
+          <label for="loginpwd">Password</label>
+          <input  type="password" class="form-control" id="loginpwd">
+        </div>
 
-
-
+      </div>
+      <div class="modal-footer">
+        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+        <button type="button" class="btn btn-default" id="loginbutton">Login</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 
@@ -250,11 +327,15 @@
 <script src="js/aes.js"></script>
 <script src="js/monitoringworkiteminfo.js"></script>
 <script src="js/localdb.js"></script>
+<script src="js/indexpagevalidation.js"></script>
+<script src="js/samudaypagelogin.js"></script>
 <script src="js/sync.js"></script>
 <script src="js/surveybtnaction.js"></script>
 <script src="js/toolbaraction.js"></script>
 <script src="js/jquery.simple-calendar.js"></script>
 <script>
+  // $("#loginusername").val(CryptoJS.AES.decrypt(localStorage.email, localStorage.employeeid).toString(CryptoJS.enc.Utf8).slice(1,-1));
+ 
   document.addEventListener("backbutton", onBackKeyDown, false);
   function onBackKeyDown(e)
   {

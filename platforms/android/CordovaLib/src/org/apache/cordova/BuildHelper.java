@@ -51,17 +51,20 @@ public class BuildHelper {
     {
         try
         {
-            Class<?> clazz = Class.forName(ctx.getPackageName() + ".BuildConfig");
+            Class<?> clazz = Class.forName(ctx.getClass().getPackage().getName() + ".BuildConfig");
             Field field = clazz.getField(key);
             return field.get(null);
         } catch (ClassNotFoundException e) {
             LOG.d(TAG, "Unable to get the BuildConfig, is this built with ANT?");
-            e.printStackTrace();
+            // e.printStackTrace();
         } catch (NoSuchFieldException e) {
             LOG.d(TAG, key + " is not a valid field. Check your build.gradle");
         } catch (IllegalAccessException e) {
             LOG.d(TAG, "Illegal Access Exception: Let's print a stack trace.");
-            e.printStackTrace();
+            // e.printStackTrace();
+        } catch (NullPointerException e) {
+            LOG.d(TAG, "Null Pointer Exception: Let's print a stack trace.");
+            // e.printStackTrace();
         }
 
         return null;

@@ -63,7 +63,7 @@ public class CordovaBridge {
             }
             return ret;
         } catch (Throwable e) {
-            e.printStackTrace();
+            // e.printStackTrace();
             return "";
         } finally {
             jsMessageQueue.setPaused(false);
@@ -127,7 +127,7 @@ public class CordovaBridge {
     }
 
     public String promptOnJsPrompt(String origin, String message, String defaultValue) {
-        if (defaultValue != null && defaultValue.length() > 3 && defaultValue.startsWith("gap:")) {
+        if (defaultValue != null && defaultValue.startsWith("gap:")) {
             JSONArray array;
             try {
                 array = new JSONArray(defaultValue.substring(4));
@@ -138,9 +138,9 @@ public class CordovaBridge {
                 String r = jsExec(bridgeSecret, service, action, callbackId, message);
                 return r == null ? "" : r;
             } catch (JSONException e) {
-                e.printStackTrace();
+                // e.printStackTrace();
             } catch (IllegalAccessException e) {
-                e.printStackTrace();
+                // e.printStackTrace();
             }
             return "";
         }
@@ -150,9 +150,9 @@ public class CordovaBridge {
                 int bridgeSecret = Integer.parseInt(defaultValue.substring(16));
                 jsSetNativeToJsBridgeMode(bridgeSecret, Integer.parseInt(message));
             } catch (NumberFormatException e){
-                e.printStackTrace();
+                // e.printStackTrace();
             } catch (IllegalAccessException e) {
-                e.printStackTrace();
+                // e.printStackTrace();
             }
             return "";
         }
@@ -163,7 +163,7 @@ public class CordovaBridge {
                 String r = jsRetrieveJsMessages(bridgeSecret, "1".equals(message));
                 return r == null ? "" : r;
             } catch (IllegalAccessException e) {
-                e.printStackTrace();
+                // e.printStackTrace();
             }
             return "";
         }

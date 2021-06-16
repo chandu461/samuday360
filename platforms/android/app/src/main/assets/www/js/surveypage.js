@@ -82,8 +82,7 @@ function surveyQuestionshtml()
 				sectioncontent+='</div><div id="'+sectionindex+'" class="tabcontent" style="overflow-y: scroll;  overflow-x: hidden;">';
 			}
 		}
-		//console.log(surveyquestions[surveyquestionsloop][1]);
-		// Question hide / show depending on Child / Parent
+		
 		if(surveyquestions[surveyquestionsloop][2]=='P'){sectioncontent+='<div class="form-group">'}
 		else if(surveyquestions[surveyquestionsloop][2]=='C'){sectioncontent+='<div class="form-group" id="'+surveyquestions[surveyquestionsloop][0]+'div" style="display:none">'}
 
@@ -108,7 +107,6 @@ function surveyQuestionshtml()
 			{sectioncontent+='onChange=changeaction(this)><span id="'+surveyquestions[surveyquestionsloop][0]+'err" class="err" ></span></div>'}else{sectioncontent+='><span id="'+surveyquestions[surveyquestionsloop][0]+'err" class="err" ></span></div>'}
 		}
 		else if(surveyquestions[surveyquestionsloop][3]=='2'){
-			//optionQuestions.indexof(surveyquestions[surveyquestionsloop][0])
 			tempoptsarray=questionsOptions[optionQuestions.indexOf(surveyquestions[surveyquestionsloop][0])];
 			for(temploop=0; temploop<tempoptsarray.length; temploop++)
 			{
@@ -119,13 +117,11 @@ function surveyQuestionshtml()
 				sectioncontent+='<span id="'+surveyquestions[surveyquestionsloop][0]+'err" class="err" ></span></div>';
 			}
 			else if(surveyquestions[surveyquestionsloop][3]=='3'){
-				//optionQuestions.indexof(surveyquestions[surveyquestionsloop][0])
 				tempoptsarray=questionsOptions[optionQuestions.indexOf(surveyquestions[surveyquestionsloop][0])];
 				tempoptsarray=tempoptsarray[0][0].split(",");
 			
 				for(temploop=0; temploop<tempoptsarray.length; temploop++)
 				{
-					//console.log(tempoptsarray[temploop]);
 					sectioncontent+='<label class="form-control form-control-label"><input type="radio" class="form-control-radio"  value="'+tempoptsarray[temploop]+'" name="'+surveyquestions[surveyquestionsloop][0]+'" id="'+surveyquestions[surveyquestionsloop][0]+'"'
 					if(childparentquestion.indexOf(surveyquestions[surveyquestionsloop][0])>=0)
 					{sectioncontent+='onclick=changeaction(this) ><span>'+tempoptsarray[temploop]+'</span></label>'}else{sectioncontent+='><span>'+tempoptsarray[temploop]+'</span></label>'}
@@ -134,7 +130,6 @@ function surveyQuestionshtml()
 				sectioncontent+='<span id="'+surveyquestions[surveyquestionsloop][0]+'err" class="err" ></span></div>';
 			}
 			else if(surveyquestions[surveyquestionsloop][3]=='4'){
-				//optionQuestions.indexof(surveyquestions[surveyquestionsloop][0])
 				tempoptsarray=questionsOptions[optionQuestions.indexOf(surveyquestions[surveyquestionsloop][0])];
 				for(temploop=0; temploop<tempoptsarray.length; temploop++)
 				{
@@ -146,7 +141,6 @@ function surveyQuestionshtml()
 				sectioncontent+='<span id="'+surveyquestions[surveyquestionsloop][0]+'err" class="err" ></span></div>';
 			}
 			else if(surveyquestions[surveyquestionsloop][3]=='5'){
-				//optionQuestions.indexof(surveyquestions[surveyquestionsloop][0])
 				tempoptsarray=questionsOptions[optionQuestions.indexOf(surveyquestions[surveyquestionsloop][0])];
 				for(temploop=0; temploop<tempoptsarray.length; temploop++)
 				{
@@ -157,7 +151,6 @@ function surveyQuestionshtml()
 				sectioncontent+='<span id="'+surveyquestions[surveyquestionsloop][0]+'err" class="err" ></span></div>';
 			}
 			else if(surveyquestions[surveyquestionsloop][3]=='6'){
-				//optionQuestions.indexof(surveyquestions[surveyquestionsloop][0])
 				sectioncontent+='<select  class="form-control" name="'+surveyquestions[surveyquestionsloop][0]+'" id="'+surveyquestions[surveyquestionsloop][0]+'" onChange=changeaction(this)>';
 				tempoptsarray=questionsOptions[optionQuestions.indexOf(surveyquestions[surveyquestionsloop][0])];
 				for(temploop=0; temploop<tempoptsarray.length; temploop++)
@@ -216,38 +209,15 @@ errid="";
 function submitsurvey()
 {
 	$(".err").html("");
-	// console.log(surveyquestions)
-	// console.log(surveyquestionnumber);
-	// console.log(onlyparentquestions);
-	// console.log(surveysections)
-	// console.log(childparentquestion)
-	// console.log(childquestions);
-	// console.log(childquestionconditions)
 	
+	surveyresponsesavetype=2;
 
-surveyresponsesavetype=2;
-// surveyparentresponse=[];
-// surveychildresponse=[];
-// optionQuestions=[]; // questions having options
-// questionsOptions=[]; // Option of questions in optionQuestions
-
-// surveyquestions=[]; // Collection of questions (with all info required)
-// surveyquestionnumber=[]; // Collection of questions (with only question number)
-// onlyparentquestions=[]; // Collection of Parent questions (with only question number)
-// surveysections=[]; // Question Section name
-
-
-// childparentquestion=[];  //Collection of Parent Questions
-// childquestions=[]; // Collection of child questions
-// childquestionconditions=[]; //Collection of condition for child questions
-
-	// console.log(onlyparentquestions.length);
 	try
 	{
 		for(parentloop=0; parentloop<onlyparentquestions.length; parentloop++)
 		{
-			surveyworkitemmappingcode=CryptoJS.AES.decrypt(localStorage.surveyworkitemmappingcode, "Samuday360").toString(CryptoJS.enc.Utf8).slice(1,-1);
-			respondantcode=CryptoJS.AES.decrypt(localStorage.respondantcode, "Samuday360").toString(CryptoJS.enc.Utf8).slice(1,-1);
+			surveyworkitemmappingcode=CryptoJS.AES.decrypt(localStorage.surveyworkitemmappingcode, localStorage.employeeid).toString(CryptoJS.enc.Utf8).slice(1,-1);
+			respondantcode=CryptoJS.AES.decrypt(localStorage.respondantcode, localStorage.employeeid).toString(CryptoJS.enc.Utf8).slice(1,-1);
 			parent=surveyquestions[surveyquestionnumber.indexOf(onlyparentquestions[parentloop])]
 
 			errid=parent[0];
@@ -273,14 +243,10 @@ surveyresponsesavetype=2;
 			//Question Validation	
 			if(parent[6]!=0)
 			{
-				// validationsdistquestions
-				// questionsvalidation
-				//console.log(validationsdistquestions);
 				var validindex=validationsdistquestions.indexOf(parent[0])
-				// console.log(validindex);
-
+				
 				if(validindex>=0)
-				{//console.log(questionsvalidation[validindex]);
+				{
 					for(validloop=0; validloop<questionsvalidation[validindex].length; validloop++)
 					{
 						questionvalids=questionsvalidation[validindex][validloop].validationtypename;
@@ -291,7 +257,8 @@ surveyresponsesavetype=2;
 								if(isNaN(validquestionanswer)){throw questionsvalidation[validindex][validloop].violationmessage}
 							}
 							else if(questionvalids=="Decimal"){
-
+								if((!validquestionanswer.length - validquestionanswer.indexOf(".") -1)>parseInt(questionsvalidation[validindex][validloop].allowedvalues))
+								{throw questionsvalidation[validindex][validloop].violationmessage}
 							}
 							else if(questionvalids=="Range"){
 								var valrange=questionsvalidation[validindex][validloop].allowedvalues.split("-");
@@ -315,21 +282,8 @@ surveyresponsesavetype=2;
 							}
 						}
 						else{throw questionsvalidation[validindex][validloop].violationmessage;}
-						// console.log(questionsvalidation[validindex][validloop]);
 					}
 				}
-
-				// if(parent[3]==2 || parent[3]==3 || parent[3]==4)
-				// {
-				// 	if(parentcheckedvalues.length<=0){  navigator.notification.alert("Please Select "+parent[1], function(){}, 'Samuday 360','Done'); throw "please select";}
-				// }
-				// else if(parent[3]==8 )
-				// {
-				// 	if(parentcheckedvalues.length<=0){  navigator.notification.alert("Please Select "+parent[1], function(){}, 'Samuday 360','Done');  throw "please select";}
-				// }
-				// else{
-				// 	if(document.getElementById(parent[0]).value==""){throw "please select";}
-				// }
 			}
 
 			childparentquestionindex=childparentquestion.indexOf(parent[0])
@@ -342,14 +296,11 @@ surveyresponsesavetype=2;
 		saveSurveyResponse();
 	  }
 	  catch(err){
-	  	//alert(err);
-	  	// console.log(errid);
 	  	$(".err").html("");
       	$("#"+errid+"err").html(err);
 	  	$("#"+errid).focus();
 
-	  	//console.log(err);
-	  	//navigator.notification.alert(err, function(){}, 'Samuday 360','Done');
+	  	navigator.notification.alert(err, function(){}, 'Samuday 360','Done');
 	}
 }
 
@@ -415,14 +366,10 @@ function childvalidation(parentindex, parentquestiontype)
 				
 				if(child[6]!=0)
 				{
-					// validationsdistquestions
-					// questionsvalidation
-					//console.log(validationsdistquestions);
 					var validindex=validationsdistquestions.indexOf(child[0])
-					// console.log(validindex);
-
+					
 					if(validindex>=0)
-					{//console.log(questionsvalidation[validindex]);
+					{
 						for(validloop=0; validloop<questionsvalidation[validindex].length; validloop++)
 						{
 							questionvalids=questionsvalidation[validindex][validloop].validationtypename;
@@ -433,7 +380,8 @@ function childvalidation(parentindex, parentquestiontype)
 									if(!isNaN(validquestionanswer)){throw questionsvalidation[validindex][validloop].violationmessage}
 								}
 								else if(questionvalids=="Decimal"){
-
+									if((!validquestionanswer.length - validquestionanswer.indexOf(".") -1)>parseInt(questionsvalidation[validindex][validloop].allowedvalues))
+									{throw questionsvalidation[validindex][validloop].violationmessage}
 								}
 								else if(questionvalids=="Range"){
 									var valrange=questionsvalidation[validindex][validloop].allowedvalues.split("-");
@@ -457,23 +405,8 @@ function childvalidation(parentindex, parentquestiontype)
 								}
 							}
 							else{throw questionsvalidation[validindex][validloop].violationmessage;}
-							// console.log(questionsvalidation[validindex][validloop]);
 						}
 					}
-
-
-
-					// if(child[3]==2 || child[3]==3 || child[3]==4)
-					// {
-					// 	if(parentcheckedvalues.length>0){ }else{ navigator.notification.alert("Please Select "+child[1], function(){}, 'Samuday 360','Done'); break;}
-					// }
-					// else if(child[3]==8 )
-					// {
-					// 	if(parentcheckedvalues.length>0){ }else{ navigator.notification.alert("Please Select "+child[1], function(){}, 'Samuday 360','Done'); break;}
-					// }
-					// else{
-					// 	if(document.getElementById(child[0]).value!=""){ }else{navigator.notification.alert("Please Enter "+child[1], function(){}, 'Samuday 360','Done'); break;}
-					// }
 				}
 			}
 		}
@@ -493,25 +426,13 @@ function savesurvey()
 surveyresponsesavetype=1;
 surveyparentresponse=[];
 surveychildresponse=[];
-// optionQuestions=[]; // questions having options
-// questionsOptions=[]; // Option of questions in optionQuestions
-
-// surveyquestions=[]; // Collection of questions (with all info required)
-// surveyquestionnumber=[]; // Collection of questions (with only question number)
-// onlyparentquestions=[]; // Collection of Parent questions (with only question number)
-// surveysections=[]; // Question Section name
-
-
-// childparentquestion=[];  //Collection of Parent Questions
-// childquestions=[]; // Collection of child questions
-// childquestionconditions=[]; //Collection of condition for child questions
 
 try
 	{
 		for(parentloop=0; parentloop<onlyparentquestions.length; parentloop++)
 		{
-			surveyworkitemmappingcode=CryptoJS.AES.decrypt(localStorage.surveyworkitemmappingcode, "Samuday360").toString(CryptoJS.enc.Utf8).slice(1,-1);
-			respondantcode=CryptoJS.AES.decrypt(localStorage.respondantcode, "Samuday360").toString(CryptoJS.enc.Utf8).slice(1,-1);
+			surveyworkitemmappingcode=CryptoJS.AES.decrypt(localStorage.surveyworkitemmappingcode, localStorage.employeeid).toString(CryptoJS.enc.Utf8).slice(1,-1);
+			respondantcode=CryptoJS.AES.decrypt(localStorage.respondantcode, localStorage.employeeid).toString(CryptoJS.enc.Utf8).slice(1,-1);
 			parent=surveyquestions[surveyquestionnumber.indexOf(onlyparentquestions[parentloop])]
 
 			errid=parent[0];
@@ -537,14 +458,10 @@ try
 			//Question Validation	
 			if(parent[6]!=0)
 			{
-				// validationsdistquestions
-				// questionsvalidation
-				//console.log(validationsdistquestions);
 				var validindex=validationsdistquestions.indexOf(parent[0])
-				// console.log(validindex);
-
+				
 				if(validindex>=0)
-				{//console.log(questionsvalidation[validindex]);
+				{
 					for(validloop=0; validloop<questionsvalidation[validindex].length; validloop++)
 					{
 						questionvalids=questionsvalidation[validindex][validloop].validationtypename;
@@ -579,21 +496,8 @@ try
 							}
 						}
 						else{throw questionsvalidation[validindex][validloop].violationmessage;}
-						// console.log(questionsvalidation[validindex][validloop]);
 					}
 				}
-
-				// if(parent[3]==2 || parent[3]==3 || parent[3]==4)
-				// {
-				// 	if(parentcheckedvalues.length<=0){  navigator.notification.alert("Please Select "+parent[1], function(){}, 'Samuday 360','Done'); throw "please select";}
-				// }
-				// else if(parent[3]==8 )
-				// {
-				// 	if(parentcheckedvalues.length<=0){  navigator.notification.alert("Please Select "+parent[1], function(){}, 'Samuday 360','Done');  throw "please select";}
-				// }
-				// else{
-				// 	if(document.getElementById(parent[0]).value==""){throw "please select";}
-				// }
 			}
 
 			childparentquestionindex=childparentquestion.indexOf(parent[0])
@@ -606,14 +510,10 @@ try
 		saveSurveyResponse();
 	  }
 	  catch(err){
-	  	//alert(err);
-	  	// console.log(errid);
 	  	$(".err").html("");
       	$("#"+errid+"err").html(err);
 	  	$("#"+errid).focus();
-
-	  	//console.log(err);
-	  	//navigator.notification.alert(err, function(){}, 'Samuday 360','Done');
+		navigator.notification.alert(err, function(){}, 'Samuday 360','Done');
 	}
 }
 
@@ -679,14 +579,10 @@ function saveChildValidation(parentindex, parentquestiontype)
 				
 				if(child[6]!=0)
 				{
-					// validationsdistquestions
-					// questionsvalidation
-					//console.log(validationsdistquestions);
 					var validindex=validationsdistquestions.indexOf(child[0])
-					// console.log(validindex);
-
+					
 					if(validindex>=0)
-					{//console.log(questionsvalidation[validindex]);
+					{
 						for(validloop=0; validloop<questionsvalidation[validindex].length; validloop++)
 						{
 							questionvalids=questionsvalidation[validindex][validloop].validationtypename;
@@ -721,32 +617,13 @@ function saveChildValidation(parentindex, parentquestiontype)
 								}
 							}
 							else{throw questionsvalidation[validindex][validloop].violationmessage;}
-							// console.log(questionsvalidation[validindex][validloop]);
+							
 						}
 					}
-
-
-
-					// if(child[3]==2 || child[3]==3 || child[3]==4)
-					// {
-					// 	if(parentcheckedvalues.length>0){ }else{ navigator.notification.alert("Please Select "+child[1], function(){}, 'Samuday 360','Done'); break;}
-					// }
-					// else if(child[3]==8 )
-					// {
-					// 	if(parentcheckedvalues.length>0){ }else{ navigator.notification.alert("Please Select "+child[1], function(){}, 'Samuday 360','Done'); break;}
-					// }
-					// else{
-					// 	if(document.getElementById(child[0]).value!=""){ }else{navigator.notification.alert("Please Enter "+child[1], function(){}, 'Samuday 360','Done'); break;}
-					// }
 				}
 			}
 		}
 	}
 }
 
-
 //  ========   Save Ends ===========
-
-
-
-

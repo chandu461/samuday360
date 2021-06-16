@@ -28,7 +28,7 @@
         this._name = pluginName;
         this.currentDate = new Date();
         if(typeof localStorage.surveybenfdate!="undefined" && localStorage.surveybenfdate!="")
-        {this.currentDate=new Date(CryptoJS.AES.decrypt(localStorage.surveybenfdate, "Samuday360").toString(CryptoJS.enc.Utf8).slice(1,-1))}
+        {this.currentDate=new Date(CryptoJS.AES.decrypt(localStorage.surveybenfdate, localStorage.employeeid).toString(CryptoJS.enc.Utf8).slice(1,-1))}
         this.events = options.events;
         this.init();
     }

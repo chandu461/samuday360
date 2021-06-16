@@ -1,0 +1,48 @@
+<!DOCTYPE html> 
+<html> 
+
+<head> 
+	<title> 
+		JavaScript 
+	| Add a key/value pair to JSON object 
+	</title> 
+</head> 
+
+<body style="text-align:center;"> 
+
+	<h1 style="color:green;"> 
+			GeeksForGeeks 
+		</h1> 
+
+	<p id="GFG_up"
+	style=" font-weight: bold"> 
+	</p> 
+
+	<button onclick="Geeks()"> 
+		Click to add 
+	</button> 
+
+	<p id="GFG_down"
+	style="color:green; 
+			font-weight: bold" ;> 
+	</p> 
+
+	<script> 
+		var GFG_p ={}; 
+		var p_up =  document.getElementById("GFG_up"); 
+		var p_down =  document.getElementById("GFG_down"); 
+		p_up.innerHTML =  JSON.stringify(GFG_p); 
+
+		function Geeks() { 
+			GFG_p["prop_4"] = "val_4"; 
+
+			GFG_p["000"] = "00bjhut"; 
+			p_down.innerHTML = JSON.stringify(GFG_p); 
+		}
+
+		for(loop=0; loop<results.rows.length; loop++){selectedmonitoringbenflist[loop]= results.rows.item(loop)}
+		
+	</script> 
+</body> 
+
+</html> 

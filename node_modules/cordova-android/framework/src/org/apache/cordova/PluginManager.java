@@ -492,7 +492,7 @@ public class PluginManager {
                 ret = (CordovaPlugin) c.newInstance();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();
             System.out.println("Error adding plugin " + className + ".");
         }
         return ret;

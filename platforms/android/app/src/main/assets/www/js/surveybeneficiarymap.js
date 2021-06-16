@@ -121,7 +121,7 @@ var benflayer = new ol.layer.Vector
     style: new ol.style.Style
     ({
         fill: new ol.style.Fill
-        ({color: 'rgba(255, 255, 255, 0.2)'}),
+        ({color: 'rgba(255, 255, 255, 0.5)'}),
         stroke: new ol.style.Stroke
         ({color: '#da965e',width: 2}),
         image: new ol.style.Circle
@@ -178,8 +178,6 @@ function loadmap()
             minZoom: 4
         })
     });
-//map.addControl(new ol.control.ZoomSlider())
-
 
 
 
@@ -263,16 +261,34 @@ function loadmap()
             map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) { if(layer==benflayer){featurearr.push([feature.get("respondentcode"), feature.get("index")]); }});
             if(featurearr.length==1)
             {
-                startsurvey(blitems[featurearr[0][1]].resondantcode)
+                if(blitems[featurearr[0][1]].status==0)
+                {
+                    mapdetailsModal(featurearr[0][1]);
+                    mapmodalbtntext='<button type="button" class="btn btn-default" onclick=startsurvey("'+blitems[featurearr[0][1]].resondantcode+'")>Survey</button> <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>'
+                   $("#mapviewbtns").html(mapmodalbtntext);
+                }
             }
             else if(featurearr.length>1)
-            {
+            { 
+                var featurecount=0;
                 htmlcontent="";
                 for(featurearrlen=0; featurearrlen<featurearr.length; featurearrlen++)
-                {htmlcontent+='<div class="col-sm-12 card odd" ><div class="card-body"><h6 class="card-title" onclick=startsurvey("'+blitems[featurearr[featurearrlen][1]].resondantcode+'")>'+blitems[featurearr[featurearrlen][1]].respondantname +'</h6><p class="card-text" onclick=startsurvey("'+blitems[featurearr[featurearrlen][1]].resondantcode+'")>'+blitems[featurearr[featurearrlen][1]].hohname+'</p><a href="#" style="float: right;  text-decoration: none; margin-top:-29px;"><button class="btn btn-info suboption" onclick="detailsModal('+featurearr[featurearrlen][1]+')">VIEW</button></a></div></div>';}
+                {
+                    if(blitems[featurearr[featurearrlen][1]].status==0)
+                    { var divclass="odd";
+                        featurecount++;
+                        if(featurearrlen%2==0)
+                        {divclass="even"}else{divclass="odd";}
+
+                        htmlcontent+='<div class="col-sm-12 card '+divclass+'" ><div class="card-body"><h6 class="card-title" onclick=startsurvey("'+blitems[featurearr[featurearrlen][1]].resondantcode+'")>'+blitems[featurearr[featurearrlen][1]].respondantname +'</h6><p class="card-text" onclick=startsurvey("'+blitems[featurearr[featurearrlen][1]].resondantcode+'")>'+blitems[featurearr[featurearrlen][1]].hohname+'</p><p class="card-text" onclick=startsurvey("'+blitems[featurearr[featurearrlen][1]].resondantcode+'")>'+blitems[featurearr[featurearrlen][1]].housecode+'</p><a href="#" style="float: right;  text-decoration: none; margin-top:-35px;"><button class="btn btn-info suboption" onclick="detailsModal('+featurearr[featurearrlen][1]+')">VIEW</button></a></div></div>';
+                    }
+                }
                 
-                $("#mapviewclickedbenfd").html(htmlcontent);
-                $("#mapviewclickedbenfdmodal").modal("show");
+                if(featurecount>0)
+                {
+                    $("#mapviewclickedbenfd").html(htmlcontent);
+                    $("#mapviewclickedbenfdmodal").modal("show");
+                }
 
             }
         })
@@ -283,20 +299,34 @@ function loadmap()
             map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) { if(layer==benflayer){featurearr.push([feature.get("respondentcode"), feature.get("index")]); }});
             if(featurearr.length==1)
             {
-                startsurvey(blitems[featurearr[0][1]].resondantcode)
+                if(blitems[featurearr[0][1]].status==0)
+                {
+                    mapdetailsModal(featurearr[0][1]);
+                    mapmodalbtntext='<button type="button" class="btn btn-default" onclick=startsurvey("'+blitems[featurearr[0][1]].resondantcode+'")>Survey</button> <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>'
+                    $("#mapviewbtns").html(mapmodalbtntext);                    
+                }
              }
             else if(featurearr.length>1)
             {
+                var featurecount=0;
                 htmlcontent="";
                 for(featurearrlen=0; featurearrlen<featurearr.length; featurearrlen++)
-                {htmlcontent+='<div class="col-sm-12 card odd" ><div class="card-body"><h6 class="card-title" onclick=startsurvey("'+blitems[featurearr[featurearrlen][1]].resondantcode+'")>'+blitems[featurearr[featurearrlen][1]].respondantname +' - '+ blitems[featurearr[featurearrlen][1]].resondantcode+'</h6><p class="card-text" onclick=startsurvey("'+blitems[featurearr[featurearrlen][1]].resondantcode+'")>'+blitems[featurearr[featurearrlen][1]].block+', '+blitems[featurearr[featurearrlen][1]].grampanchayat+', '+blitems[featurearr[featurearrlen][1]].village+'</p><a href="#" style="float: right;  text-decoration: none; margin-top:-29px;"><button class="btn btn-info suboption" onclick="detailsModal('+featurearr[featurearrlen][1]+')">VIEW</button></a></div></div>';}
-                
-                $("#mapviewclickedbenfd").html(htmlcontent);
-                $("#mapviewclickedbenfdmodal").modal("show");
+                {
+                    if(blitems[featurearr[featurearrlen][1]].status==0)
+                    { var divclass="odd";
+                        featurecount++;
+                        if(featurearrlen%2==0)
+                        {divclass="even"}else{divclass="odd";}
 
+                        htmlcontent+='<div class="col-sm-12 card '+divclass+'" ><div class="card-body"><h6 class="card-title" onclick=startsurvey("'+blitems[featurearr[featurearrlen][1]].resondantcode+'")>'+blitems[featurearr[featurearrlen][1]].respondantname +'</h6><p class="card-text" onclick=startsurvey("'+blitems[featurearr[featurearrlen][1]].resondantcode+'")>'+blitems[featurearr[featurearrlen][1]].hohname+'</p><p class="card-text" onclick=startsurvey("'+blitems[featurearr[featurearrlen][1]].resondantcode+'")>'+blitems[featurearr[featurearrlen][1]].housecode+'</p><a href="#" style="float: right;  text-decoration: none; margin-top:-35px;"><button class="btn btn-info suboption" onclick="detailsModal('+featurearr[featurearrlen][1]+')">VIEW</button></a></div></div>';
+                    }
+                }
+                
+                if(featurecount>0)
+                {
+                    $("#mapviewclickedbenfd").html(htmlcontent);
+                    $("#mapviewclickedbenfdmodal").modal("show");
+                }
             }
         })
 }
-
-
-

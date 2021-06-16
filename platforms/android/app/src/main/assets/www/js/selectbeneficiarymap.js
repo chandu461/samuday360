@@ -254,39 +254,40 @@ map.getLayers().forEach(function(layer, i)
         map.addLayer(navigatorLayers);
 
 
-        map.on('singleclick', function(evt)
-        {
-            featurearr=[];
-            map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) { if(layer==benflayer){featurearr.push([feature.get("respondentcode"), feature.get("index")]); }});
-            if(featurearr.length==1)
-            {
-                selectcard(featurearr[0][1], featurearr[0][0]);
-                document.getElementById(featurearr[0][1]).style.backgroundColor="#F0F0F0";
-            }
-            else if(featurearr.length>1)
-            {
-                var temparra=[]
-                htmlcontent="";
-                for(featurearrlen=0; featurearrlen<featurearr.length; featurearrlen++)
-                {
-                    if(temparra.indexOf(featurearr[featurearrlen][1])<0)
-                    {temparra.push(featurearr[featurearrlen][1]);
-                        htmlcontent+='<div class="col-sm-12 card"  id="'+featurearr[featurearrlen][1]+'a"> <div class="card-body"><h6 class="card-title" onclick=selectcardmodal("'+featurearr[featurearrlen][1]+'","'+blitems[featurearr[featurearrlen][1]].resondantcode+'")>'+blitems[featurearr[featurearrlen][1]].respondantname +'</h6><p class="card-text" onclick=selectcardmodal("'+featurearr[featurearrlen][1]+'","'+blitems[featurearr[featurearrlen][1]].resondantcode+'")>'+blitems[featurearr[featurearrlen][1]].hohname+'</p><a href="#" style="float: right;  text-decoration: none; margin-top:-29px;"><button class="btn btn-info suboption" onclick="detailsModal('+featurearr[featurearrlen][1]+')">VIEW</button></a></div></div>'
-                    }
-                }
+        // map.on('singleclick', function(evt)
+        // {
+        //     featurearr=[];
+        //     map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) { if(layer==benflayer){featurearr.push([feature.get("respondentcode"), feature.get("index")]); }});
+        //     if(featurearr.length==1)
+        //     {
+        //         // selectcardmodal
+        //         selectcard(featurearr[0][1], featurearr[0][0]);
+        //         document.getElementById(featurearr[0][0]).style.backgroundColor="#F0F0F0";
+        //     }
+        //     else if(featurearr.length>1)
+        //     {
+        //         var temparra=[]
+        //         htmlcontent="";
+        //         for(featurearrlen=0; featurearrlen<featurearr.length; featurearrlen++)
+        //         {
+        //             if(temparra.indexOf(featurearr[featurearrlen][1])<0)
+        //             {temparra.push(featurearr[featurearrlen][1]);
+        //                 htmlcontent+='<div class="col-sm-12 card"  id="'+featurearr[featurearrlen][1]+'a"> <div class="card-body"><h6 class="card-title" onclick=selectcardmodal("'+featurearr[featurearrlen][1]+'","'+blitems[featurearr[featurearrlen][1]].resondantcode+'")>'+blitems[featurearr[featurearrlen][1]].respondantname +'</h6><p class="card-text" onclick=selectcardmodal("'+featurearr[featurearrlen][1]+'","'+blitems[featurearr[featurearrlen][1]].resondantcode+'")>'+blitems[featurearr[featurearrlen][1]].hohname+'</p><a href="#" style="float: right;  text-decoration: none; margin-top:-29px;"><button class="btn btn-info suboption" onclick="detailsModal('+featurearr[featurearrlen][1]+')">VIEW</button></a></div></div>'
+        //             }
+        //         }
                 
-                $("#mapviewclickedbenfd").html(htmlcontent);
+        //         $("#mapviewclickedbenfd").html(htmlcontent);
 
-                for(featurearrlen=0; featurearrlen<featurearr.length; featurearrlen++)
-                {
-                   if(selectedbeneficiaryarray.indexOf(blitems[featurearr[featurearrlen][1]].resondantcode)>=0)
-                    {document.getElementById(featurearr[featurearrlen][1]+"a").style.backgroundColor="#F0F0F0";}
-                }
+        //         for(featurearrlen=0; featurearrlen<featurearr.length; featurearrlen++)
+        //         {
+        //            if(selectedbeneficiaryarray.indexOf(blitems[featurearr[featurearrlen][1]].resondantcode)>=0)
+        //             {document.getElementById(featurearr[featurearrlen][1]+"a").style.backgroundColor="#F0F0F0";}
+        //         }
 
-                $("#mapviewclickedbenfdmodal").modal("show");
+        //         $("#mapviewclickedbenfdmodal").modal("show");
 
-            }
-        })
+        //     }
+        // })
 
         map.on('pointermove', function(evt)
         {
@@ -295,7 +296,7 @@ map.getLayers().forEach(function(layer, i)
             if(featurearr.length==1)
             {
                 selectcard(featurearr[0][1], featurearr[0][0]);
-                document.getElementById(featurearr[0][1]).style.backgroundColor="#F0F0F0";
+                document.getElementById(featurearr[0][0]).style.backgroundColor="#F0F0F0";
             }
             else if(featurearr.length>1)
             {
@@ -322,6 +323,3 @@ map.getLayers().forEach(function(layer, i)
             }
         })
 }
-
-
-

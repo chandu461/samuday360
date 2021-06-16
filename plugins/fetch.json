@@ -54,5 +54,45 @@
     },
     "is_top_level": true,
     "variables": {}
+  },
+  "cordova-plugin-root-detection": {
+    "source": {
+      "type": "registry",
+      "id": "https://github.com/trykovyura/cordova-plugin-root-detection.git"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-disable-http-cache": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-disable-http-cache"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-proguard": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-proguard"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-sqlite-storage": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-sqlite-storage"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-allow-backup": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-allow-backup"
+    },
+    "is_top_level": true,
+    "variables": {}
   }
 }

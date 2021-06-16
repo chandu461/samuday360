@@ -12,7 +12,7 @@ document.getElementById("surveybeneficiarymap").style.display = "block"
 function startsurvey(respondantcode)
 {
 	//console.log(respondantcode);
-	localStorage.respondantcode=CryptoJS.AES.encrypt('"'+respondantcode+'"', "Samuday360");
+	localStorage.respondantcode=CryptoJS.AES.encrypt('"'+respondantcode+'"', localStorage.employeeid);
 
 	var path = window.location.pathname.split("/").pop();
 	if(path=="surveybeneficiarylist.html"){window.location.href="surveypage.html";}
@@ -32,7 +32,6 @@ function loadbaselineOpenBenef()
 	localStorage.respondantcode="";
 	filterLoadBlocks();
 	getBLBeneficiaryList();
-	//surveybeneficiary()
 }
 
 
@@ -42,8 +41,9 @@ function loadMonitoringselectedBenef()
 {
 	localStorage.respondantcode="";
 	if(typeof localStorage.surveybenfdate!="undefined" && localStorage.surveybenfdate!="")
-	{surveybenfdate=CryptoJS.AES.decrypt(localStorage.surveybenfdate, "Samuday360").toString(CryptoJS.enc.Utf8).slice(1,-1);}
+	{surveybenfdate=CryptoJS.AES.decrypt(localStorage.surveybenfdate, localStorage.employeeid).toString(CryptoJS.enc.Utf8).slice(1,-1);}
 	else{surveybenfdate=(new Date()).toISOString().slice(0,10);}
+	
 	getMonitoringselectedBenef();
 	filterLoadBlocks();
 }

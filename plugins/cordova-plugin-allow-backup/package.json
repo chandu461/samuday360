@@ -1,0 +1,53 @@
+{
+  "_from": "cordova-plugin-allow-backup",
+  "_id": "cordova-plugin-allow-backup@0.0.2",
+  "_inBundle": false,
+  "_integrity": "sha1-bodMB2J4ms49y/MJXbaHnoFMZQY=",
+  "_location": "/cordova-plugin-allow-backup",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "cordova-plugin-allow-backup",
+    "name": "cordova-plugin-allow-backup",
+    "escapedName": "cordova-plugin-allow-backup",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#DEV:/",
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-allow-backup/-/cordova-plugin-allow-backup-0.0.2.tgz",
+  "_shasum": "6e874c0762789ace3dcbf3095db6879e814c6506",
+  "_spec": "cordova-plugin-allow-backup",
+  "_where": "F:\\apps\\MOBILE\\Samuday360\\Samuday 360 HCL Submitted\\9 version\\Samuday 360 HCL SSL latest version",
+  "author": {
+    "name": "Simon MacDonald"
+  },
+  "bugs": {
+    "url": "https://github.com/macdonst/cordova-plugin-allow-backup/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "To enable you to set the allowBackup property of a cordova-android application",
+  "devDependencies": {
+    "pluginpub": "0.0.8"
+  },
+  "homepage": "https://github.com/macdonst/cordova-plugin-allow-backup#readme",
+  "keywords": [
+    "cordova"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "name": "cordova-plugin-allow-backup",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/macdonst/cordova-plugin-allow-backup.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 0"
+  },
+  "version": "0.0.2"
+}

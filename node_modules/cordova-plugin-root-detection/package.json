@@ -1,0 +1,62 @@
+{
+  "_from": "git+https://github.com/trykovyura/cordova-plugin-root-detection.git",
+  "_id": "cordova-plugin-root-detection@0.1.1",
+  "_inBundle": false,
+  "_integrity": "",
+  "_location": "/cordova-plugin-root-detection",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "git",
+    "raw": "https://github.com/trykovyura/cordova-plugin-root-detection.git",
+    "rawSpec": "https://github.com/trykovyura/cordova-plugin-root-detection.git",
+    "saveSpec": "git+https://github.com/trykovyura/cordova-plugin-root-detection.git",
+    "fetchSpec": "https://github.com/trykovyura/cordova-plugin-root-detection.git",
+    "gitCommittish": null
+  },
+  "_requiredBy": [
+    "#DEV:/",
+    "#USER"
+  ],
+  "_resolved": "git+https://github.com/trykovyura/cordova-plugin-root-detection.git#e560a070638d5e5955106b6babc181c837b23f39",
+  "_spec": "https://github.com/trykovyura/cordova-plugin-root-detection.git",
+  "_where": "F:\\apps\\MOBILE\\Samuday360\\Samuday 360 HCL SSL latest version",
+  "author": {
+    "name": "Yury Trykov",
+    "url": "http://trykov.ru/"
+  },
+  "bugs": {
+    "url": "https://github.com/trykovyura/cordova-plugin-root-detection/issues"
+  },
+  "bundleDependencies": false,
+  "cordova": {
+    "id": "cordova-plugin-root-detection",
+    "platforms": [
+      "android"
+    ]
+  },
+  "deprecated": false,
+  "description": "Cordova Plugin for detecting if the device running the app is rooted.",
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=3.0.0"
+    }
+  ],
+  "homepage": "https://github.com/trykovyura/cordova-plugin-root-detection#readme",
+  "keywords": [
+    "cordova",
+    "detection",
+    "detector",
+    "root",
+    "rooted",
+    "ecosystem:cordova",
+    "cordova-android"
+  ],
+  "license": "MIT",
+  "name": "cordova-plugin-root-detection",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trykovyura/cordova-plugin-root-detection.git"
+  },
+  "version": "0.1.1"
+}

@@ -29,6 +29,12 @@ function blloadsettings()
 
 
 // ========== Toolbar user SYNC ==========
+
+function usertoolbarsync(){
+	 // $("#loginmodal").modal("show");
+	 userSync();
+}
+
 function userSync()
 {
 	//syncdate();
@@ -40,6 +46,8 @@ function userSync()
 		
 	}else{ SpinnerDialog.hide(); navigator.notification.alert("Please Check You Internet Connetion", function(){}, 'Samuday 360','Done');}
 }
+
+
 
 
 // ========== Toolbar Refresh ==========
@@ -54,18 +62,57 @@ function userRefresh()
 
 function logout()
 {
-	value = confirm("Do You Want To Logout!");
-	if(value==true){
-		localStorage.clear();
-		window.location.href="index.html";
-	}
-	else{}
+	rootdetection.isDeviceRooted(function (result) {
+		if(result==0)
+		{
+			navigator.notification.confirm("Do You Want To Logout !", function(results) {if(results == 1) {
+				
+				
+
+				var service=CryptoJS.AES.decrypt(localStorage.utilmedium, device.uuid).toString(CryptoJS.enc.Utf8).slice(1,-1);
+				var userid=CryptoJS.AES.decrypt(localStorage.employeeid, device.uuid).toString(CryptoJS.enc.Utf8).slice(1,-1);
+				var accessticket=CryptoJS.AES.decrypt(localStorage.ticket, localStorage.employeeid).toString(CryptoJS.enc.Utf8).slice(1,-1);
+					if(service!="")
+					{
+						SpinnerDialog.show("Samuday 360", "Logging Out...", true);
+						$.ajax({
+							type:"GET",
+							dataType:"json",
+							headers: { 'token': accessticket, 'empcode': userid, 'uuid': device.uuid },
+							ContentType:"application/json",
+					        url:service+"loginservice.asmx/emplogoutservice",
+					        success: function(response, message, status)
+							{
+								SpinnerDialog.hide();
+								if(status.status==200)
+								{
+									localStorage.clear();
+									setTimeout(function(){window.location.href="index.html"}, 1000)
+								}
+								else if(status.status==401){
+									localStorage.clear();
+									setTimeout(function(){window.location.href="index.html"}, 1000)
+								}
+							},
+							error: function(err)
+							{
+								SpinnerDialog.hide();
+								if(err.status==401){
+									localStorage.clear();
+									window.location.href="index.html";
+								}
+								else{navigator.notification.alert("Please try again", function(){}, 'Samuday 360','Done');}
+							}
+						})
+					}else{navigator.notification.alert("Something went worng", function(){}, 'Samuday 360','Done');}
+
+				}
+			}, 'Samuday 360', ['Ok','Exit'] );
+		}else{navigator.notification.alert("Device doesn't Support", function(){}, 'Samuday 360','Done');}
+	}, function (error) {navigator.notification.alert("Device doesn't Support", function(){}, 'Samuday 360','Done');});
 }
 
 function movetohome()
 {
-	value = confirm("Do You Want Go Back To Home!");
-	if(value==true){
-		window.location.href="home.html";
-	}
+	navigator.notification.confirm("Do You Want Go Back To Home!", function(results) {if(results == 1) {window.location.href="home.html";} }, 'Samuday 360', ['Yes','No'] );
 }

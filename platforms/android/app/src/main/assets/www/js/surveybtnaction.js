@@ -8,9 +8,9 @@ if(window.location.pathname.split("/").pop()=="dashboard.html")
 //======== Monitoring Work Item View  =========
 function monitoringWorkItemView(workitemid,surveyworkitemmappingcode, surveycode)
 {
-	localStorage.workitem=CryptoJS.AES.encrypt('"'+workitemid+'"', "Samuday360");
-	localStorage.surveyworkitemmappingcode=CryptoJS.AES.encrypt('"'+surveyworkitemmappingcode+'"', "Samuday360");
-	localStorage.survey=CryptoJS.AES.encrypt('"'+surveycode+'"', "Samuday360");
+	localStorage.workitem=CryptoJS.AES.encrypt('"'+workitemid+'"', localStorage.employeeid);
+	localStorage.surveyworkitemmappingcode=CryptoJS.AES.encrypt('"'+surveyworkitemmappingcode+'"', localStorage.employeeid);
+	localStorage.survey=CryptoJS.AES.encrypt('"'+surveycode+'"', localStorage.employeeid);
 		
 	window.location.href="monitoringworkiteminfo.html";
 }
@@ -26,7 +26,7 @@ function monitoringsurveyView()
 //========= Edit Beneficiary  =============
 function editBeneficiary()
 {
-	localStorage.survey=CryptoJS.AES.encrypt('"'+surveycode+'"', "Samuday360");
+	localStorage.survey=CryptoJS.AES.encrypt('"'+surveycode+'"', localStorage.employeeid);
 	window.location.href="editbeneficiary.html";
 }
 
@@ -34,7 +34,7 @@ function editBeneficiary()
 //========= Survey Beneficiary List ==========
 function surveyBeneficiaryList()
 {
-	localStorage.survey=CryptoJS.AES.encrypt('"'+surveycode+'"', "Samuday360");
+	localStorage.survey=CryptoJS.AES.encrypt('"'+surveycode+'"', localStorage.employeeid);
 	window.location.href="surveybeneficiarylist.html";
 }
 
@@ -42,8 +42,10 @@ function surveyBeneficiaryList()
 //========= Select Beneficiary  ============
 function selectBeneficiary()
 {
-	localStorage.survey=CryptoJS.AES.encrypt('"'+surveycode+'"', "Samuday360");
+
+	localStorage.survey=CryptoJS.AES.encrypt('"'+surveycode+'"', localStorage.employeeid);
 	window.location.href="selectsbeneficiary.html";
+
 }
 
 
@@ -57,10 +59,11 @@ function selectBeneficiary()
 
 
 // ============ Baseline Work Item View ===========
-function baselineWorkItemView(workitemid,surveyworkitemmappingcode)
+function baselineWorkItemView(workitemid,surveyworkitemmappingcode,surveycode)
 {
-	localStorage.workitem=CryptoJS.AES.encrypt('"'+workitemid+'"', "Samuday360");
-	localStorage.surveyworkitemmappingcode=CryptoJS.AES.encrypt('"'+surveyworkitemmappingcode+'"', "Samuday360");
+	localStorage.workitem=CryptoJS.AES.encrypt('"'+workitemid+'"', localStorage.employeeid);
+	localStorage.surveyworkitemmappingcode=CryptoJS.AES.encrypt('"'+surveyworkitemmappingcode+'"', localStorage.employeeid);
+	localStorage.survey=CryptoJS.AES.encrypt('"'+surveycode+'"', localStorage.employeeid);
 	window.location.href="baselineworkiteminfo.html";
 }
 
@@ -68,7 +71,7 @@ function baselineWorkItemView(workitemid,surveyworkitemmappingcode)
 // ============ Baseline Survey View ============
 function baselineSurveyView()
 {
-	localStorage.survey=CryptoJS.AES.encrypt('"'+surveycode+'"', "Samuday360");
+	localStorage.survey=CryptoJS.AES.encrypt('"'+surveycode+'"', localStorage.employeeid);
 	$("#surveyinfodetailmodal").modal("show");
 }
 
@@ -76,7 +79,7 @@ function baselineSurveyView()
 // ============ Baseline Edit Beneficiary ===========
 function baselineEditBeneficiary()
 {
-	localStorage.survey=CryptoJS.AES.encrypt('"'+surveycode+'"', "Samuday360");
+	localStorage.survey=CryptoJS.AES.encrypt('"'+surveycode+'"', localStorage.employeeid);
 	window.location.href="bleditbeneficiary.html";
 }
 
@@ -84,6 +87,6 @@ function baselineEditBeneficiary()
 // ============ Baseline Survey Beneficiary List ===========
 function baselineSurveyBeneficiaryList()
 {
-	localStorage.survey=CryptoJS.AES.encrypt('"'+surveycode+'"', "Samuday360");
+	localStorage.survey=CryptoJS.AES.encrypt('"'+surveycode+'"', localStorage.employeeid);
 	window.location.href="blsurveybeneficiarylist.html";
 }

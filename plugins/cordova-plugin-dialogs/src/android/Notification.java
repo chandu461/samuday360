@@ -385,7 +385,9 @@ public class Notification extends CordovaPlugin {
                         try {
                             result.put("buttonIndex",0);
                             result.put("input1", promptInput.getText().toString().trim().length()==0 ? defaultText : promptInput.getText());
-                        } catch (JSONException e) { e.printStackTrace(); }
+                        } catch (JSONException e) {
+                            // e.printStackTrace();
+                     }
                         callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, result));
                     }
                 });

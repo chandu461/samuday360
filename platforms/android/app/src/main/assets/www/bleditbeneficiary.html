@@ -2,8 +2,11 @@
 <html lang="en" >
   <head>
     <meta charset="UTF-8">
-    <title>samuday</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>samuday</title>
     <link rel="stylesheet" type="text/css" href="css/filterdropdownmultiple.css">
     <link rel="stylesheet" href="fonts/font-awesome/css/font-awesome.min.css" media="all" >
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
@@ -13,9 +16,14 @@
     <script type="text/javascript" src="cordova.js"></script>
     <style type="text/css">
       
-      .card{
+      /*.card{
             height: 84px;
+      }*/
+
+      .card {
+        height: auto;
       }
+
       .card p {
         margin-bottom: 0px;
       }
@@ -37,23 +45,12 @@
 
       <nav class="navbar navbar-expand-lg navbar-dark" style="background:#0b70b3;padding-top: 0px;padding-bottom: 0px;">
         <a class="navbar-brand" href="#"><img src="img/logo5.png" width="50%" style="height: 48px; width: 49px;"></a>
-          <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button> -->
+         
         <h5 class="pagetitle">Baseline Edit</h5>
         <span></span>
-        <!-- <span class="fa fa-power-off" aria-hidden="true" onclick="logout()" style="color: #f2f2f2; "></span> -->
+       
       </nav>                
-     <!--  <div class="collapse navbar-collapse" id="navbarText" style="background:cornflowerblue">
-        <ul class="navbar-nav mr-auto" style="padding: 15px;">
-            
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="attendance">Login</a>
-                
-            </li> 
-        </ul>
-        
-    </div>    -->
+     
   </main>
 
   <div class="toolbar">
@@ -68,14 +65,15 @@
       <ul class="dropdown-menu dropdown-menu-right searchicon">
         <div class="searchdiv">
           <input class="form-control searchinput" id="searchinput"/>
-          <button class="btn btn-default fa fa-search searchbtn" onClick="searchbenf('1')"></button>
+          <button class="btn btn-default fa fa-search searchbtn" onClick="filterApply('1')"></button>
+          <!-- searchbenf('1') -->
         </div>
       </ul>
     </span>
     
 
     <span onClick="userFilter()" class="fa fa-filter"></span>
-    <span onClick="userSync()" class="fa fa-refresh"></span>
+    <span onClick="usertoolbarsync()" class="fa fa-refresh"></span>
     <span onClick="userRefresh()" class="fa fa-compress"></span>
     <a href="#" onClick="movetohome()" class="fa fa-home"></a>
 
@@ -107,7 +105,6 @@
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
-        <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
         <h4 class="modal-title">Details</h4>
       </div>
       <div class="modal-body">
@@ -120,6 +117,7 @@
             <tr><td>Occupation</td><td><span id="beneficiaryoccupation"></span></td></tr>
             <tr><td>HOH Name</td><td><span id="beneficiaryhohname"></span></td></tr>
             <tr><td>Relation</td><td><span id="beneficiaryrelation"></span></td></tr>
+            <tr><td>Building Type</td><td><span id="beneficiarybuildingtype"></span></td></tr>
             <tr><td>Village</td><td><span id="beneficiaryvillage"></span></td></tr>
             <tr><td>GP</td><td><span id="beneficiarygp"></span></td></tr>
             <tr><td>Block</td><td><span id="beneficiaryblock"></span></td></tr>
@@ -146,46 +144,63 @@
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
-        <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
         <h4 class="modal-title">Filter</h4>
       </div>
       <div class="modal-body">
           
           <div class="container" id="surveyform">
             <div class="form-group">
-              <label for="name">Block</label>
-              <select id="block" class="form-control" multiple="multiple">
+              <label for="block">Block</label>
+              <select id="block" onchange="filterblockonchange()" class="form-control" multiple="multiple">
 
               </select>
             </div>
 
             <div class="form-group">
-              <label for="name">GP</label>
-              <select type="text" class="form-control" id="filtergp"  multiple="multiple">
+              <label for="filtergp">GP</label>
+              <select type="text" class="form-control" onchange="filtergponchange()" id="filtergp"  multiple="multiple">
               </select>
             </div>
             <div class="form-group">
-              <label for="name">Village</label>
+              <label for="filtervillage">Village</label>
               <select type="text" class="form-control" id="filtervillage"  multiple="multiple">
                
               </select>
             </div>
 
-            <div class="form-group" hidden="true">
+            <div class="form-group">
               <label for="buildingtype">Building Type</label>
               <select id="buildingtype" class="form-control" multiple="multiple">
 
               </select>
             </div>
             
-           <div class="form-group">
+            <div class="form-group" style="display: none">
               <label for="name">Sort By</label>
               <select type="text" class="form-control" id="filterorderby">
                   <option value="block"> Block </option>
                   <option value="grampanchayat">GP</option>
                   <option value="village">Village</option>
-                  <!-- <option value="status"> Survey Status</option> -->
                   <option value="resondantcode">HH Code</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="name">Member Type</label>
+              <select type="text" class="form-control" id="filtermember">
+                  <option value="ALL">ALL</option>
+                  <option value="HOH">HOH</option>
+                  <option value="NONHOH">Non HOH</option>
+              </select>
+            </div>
+
+           <div class="form-group">
+              <label for="name">Gender</label>
+              <select type="text" class="form-control" id="filtergender">
+                  <option value=""></option>
+                  <option value="MALE">Male</option>
+                  <option value="FEMALE">Female</option>
+                  <option value="NA">N.A</option>
               </select>
             </div>
 
@@ -215,25 +230,24 @@
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
-        <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
-        <h4 class="modal-title">Beneficiary Load Filter</h4>
+        <h4 class="modal-title">Filter</h4>
       </div>
       <div class="modal-body">
           
           <div class="container" id="surveyform">
             <div class="form-group">
-              <label for="block"><span class="mandate">* </span>Block</label>
+              <label for="loadbenfblock"><span class="mandate">* </span>Block</label>
               <select id="loadbenfblock" class="form-control" multiple="multiple">
               </select>
             </div>
 
             <div class="form-group">
-              <label for="filtergp"> <span class="mandate">* </span> GP</label>
+              <label for="loadbenffiltergp"> <span class="mandate">* </span> GP</label>
               <select type="text" class="form-control" id="loadbenffiltergp"  multiple="multiple">
               </select>
             </div>
             <div class="form-group">
-              <label for="filtervillage"> <span class="mandate">* </span> Village</label>
+              <label for="loadbenffiltervillage"> <span class="mandate">* </span> Village</label>
               <select type="text" class="form-control" id="loadbenffiltervillage"  multiple="multiple">
 
               </select>
@@ -253,6 +267,34 @@
 
 
 
+<!-- Modal -->
+<div class="modal fade" id="loginmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Login</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="loginusername">User ID</label>
+          <input type="email" class="form-control" id="loginusername">
+        </div>
+        <div class="form-group">
+          <label for="loginpwd">Password</label>
+          <input  type="password" class="form-control" id="loginpwd">
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" id="loginbutton">Login</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 
 
@@ -262,6 +304,8 @@
 <script src='js/popper.min.js'></script>
 <script src='js/bootstrap.min.js'></script>
 <script src='js/mdb.min.js'></script>
+<script src="js/indexpagevalidation.js"></script>
+<script src="js/samudaypagelogin.js"></script>
 <script src='js/localdb.js'></script>
 <script src="js/workiteminfo.js"></script>
 <script src="js/editbeneficiary.js"></script>
@@ -270,6 +314,8 @@
 <script src="js/sync.js"></script>
 <script src="js/bootstrap-multiselect.min.js"></script>
 <script>
+  //$("#loginusername").val(CryptoJS.AES.decrypt(localStorage.email, localStorage.employeeid).toString(CryptoJS.enc.Utf8).slice(1,-1));
+  
   document.addEventListener("backbutton", onBackKeyDown, false);
   function onBackKeyDown(e)
   {
@@ -282,19 +328,35 @@
 
   function detailsModal(index)
   {
-    boddate=new Date(blitems[index].dateofbirth);
-    $("#beneficiaryhhcode").html(blitems[index].housecode);
-    $("#beneficiaryname").html(blitems[index].respondantname);
-    $("#beneficiarygender").html(blitems[index].gender);
-    $("#beneficiarybod").html(boddate.getDate() +"-"+boddate.getMonth() +"-"+boddate.getFullYear());
-    $("#beneficiaryoccupation").html(blitems[index].occupation);
-    $("#beneficiaryhohname").html(blitems[index].hohname);
-    $("#beneficiaryrelation").html(blitems[index].relationwithhoh);
-    $("#beneficiaryvillage").html(blitems[index].village);
-    $("#beneficiarygp").html(blitems[index].grampanchayat);
-    $("#beneficiaryblock").html(blitems[index].block);
 
-    $("#detailmodal").modal("show");
+    rootdetection.isDeviceRooted(function (result) {
+      if(result==0)
+      {
+        var dob="";
+        if(blitems[index].dateofbirth!="")
+        {
+          var boddate=new Date(blitems[index].dateofbirth);
+          var date=boddate.getDate();
+          var month=boddate.getMonth();
+          var year=boddate.getFullYear();
+          dob= date+"-"+month+"-"+year;
+        }
+
+        $("#beneficiaryhhcode").html(blitems[index].housecode);
+        $("#beneficiaryname").html(blitems[index].respondantname);
+        $("#beneficiarygender").html(blitems[index].gender);
+        $("#beneficiarybod").html(dob);
+        $("#beneficiaryoccupation").html(blitems[index].occupation);
+        $("#beneficiaryhohname").html(blitems[index].hohname);
+        $("#beneficiaryrelation").html(blitems[index].relationwithhoh);
+        $("#beneficiarybuildingtype").html(blitems[index].buildingtype);
+        $("#beneficiaryvillage").html(blitems[index].village);
+        $("#beneficiarygp").html(blitems[index].grampanchayat);
+        $("#beneficiaryblock").html(blitems[index].block);
+
+        $("#detailmodal").modal("show");
+      }else{navigator.notification.alert("Device doesn't Support", function(){}, 'Samuday 360','Done');}
+    }, function (error) {navigator.notification.alert("Device doesn't Support", function(){}, 'Samuday 360','Done');});
   }
 
 </script>

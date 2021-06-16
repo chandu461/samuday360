@@ -14,5 +14,6 @@ function emailval(email)
 	var filter = /^([a-zA-Z0-9_\.\-])+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
 	if (!filter.test(email))
 	{return false;}
-	else{return true;}	
+	else{return true;}
+
 }	

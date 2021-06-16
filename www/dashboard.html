@@ -2,8 +2,11 @@
 <html lang="en" >
   <head>
     <meta charset="UTF-8">
-    <title>samuday</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>samuday</title>
     <link rel="stylesheet" href="fonts/font-awesome/css/font-awesome.min.css" media="all" >
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <link href="css/mdb.min.css" rel="stylesheet">
@@ -19,13 +22,18 @@
         margin-top: 0px;
       }
      .card {
-        height: 99px;
+        height: auto;
      }
      
      h6{
       white-space: nowrap;
       overflow: hidden;
      }
+     .outdated{
+      background-color: rgba(247,126,47,0.73);
+      color:#FFFFFF;
+     }
+     .outdated div h6, .outdated div p{color:#FFFFFF !important;}
     </style>
 
   </head>
@@ -34,22 +42,11 @@
 
       <nav class="navbar navbar-expand-lg navbar-dark" style="background:#0b70b3;padding-top: 0px;padding-bottom: 0px;">
         <a class="navbar-brand" href="#"><img src="img/logo5.png" width="50%" style="height: 48px; width: 49px;"></a>
-         <!--  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button> -->
-        <h5 class="pagetitle">Dashboard</h5>
+         
+        <h5 class="pagetitle">My workspace</h5>
         <span></span>
-        <!-- <span class="fa fa-power-off" aria-hidden="true" onclick="logout()" style="color: #f2f2f2; "></span> -->
-      </nav>                
-     <!--  <div class="collapse navbar-collapse" id="navbarText" style="background:cornflowerblue">
-        <ul class="navbar-nav mr-auto" style="padding: 15px;">
-            
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="attendance">ashboard</a>
-                
-            </li> 
-        </ul> -->
-        
+       
+      </nav>
     </div>   
   </main>
 
@@ -62,6 +59,8 @@
     <a href="#" onClick="userSync()" class="fa fa-refresh"></a>
     <a href="#" onClick="userRefresh()" class="fa fa-compress"></a>
     <a href="#" onClick="movetohome()" class="fa fa-home"></a>
+
+    <span id="lastsynceddate" style="padding: 8px;"></span>
   </div>
 
   <div class="tab">
@@ -84,6 +83,40 @@
 
     </div>
   </div>
+
+
+
+
+ <!-- Modal -->
+<div class="modal fade" id="loginmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Login</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="loginusername">User ID</label>
+          <input type="email" class="form-control" id="loginusername">
+        </div>
+        <div class="form-group">
+          <label for="loginpwd">Password</label>
+          <input  type="password" class="form-control" id="loginpwd">
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+        <button type="button" class="btn btn-default" id="loginbutton">Login</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 </body>
 <!-- partial -->
 <script src='js/popper.min.js'></script>
@@ -91,12 +124,16 @@
 <script src='js/mdb.min.js'></script>
 <script src="js/dashboard.js"></script>
 <script src="js/tabview.js"></script>
+<script src="js/indexpagevalidation.js"></script>
+<script src="js/samudaypagelogin.js"></script>
 <script src="js/surveybtnaction.js"></script>
 <script src="js/aes.js"></script>
 <script src="js/toolbaraction.js"></script>
 <script src="js/localdb.js"></script>
 <script src="js/sync.js"></script>
 <script>
+  $("#loginusername").val(CryptoJS.AES.decrypt(localStorage.email, localStorage.employeeid).toString(CryptoJS.enc.Utf8).slice(1,-1));
+ 
 
   document.addEventListener("backbutton", onBackKeyDown, false);
   function onBackKeyDown(e)
