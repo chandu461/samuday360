@@ -1,5 +1,6 @@
 var surveycode="";
 var surveyworkitemmappingcode=""
+var loadbengisdata="";
 
 screenheight=parseInt(screen.height)-180
 $("#wokitemview").height(screenheight);
@@ -113,4 +114,46 @@ function downloaddatacheck()
 	alert($("#block").val());
 	alert($("#filtergp").val());
 	alert($("#filtervillage").val());
+}
+
+
+function loadgisdata()
+{
+	loadbengisdata="";
+	var service=CryptoJS.AES.decrypt(localStorage.utilmedium, device.uuid).toString(CryptoJS.enc.Utf8).slice(1,-1);
+	var userid=CryptoJS.AES.decrypt(localStorage.employeeid, device.uuid).toString(CryptoJS.enc.Utf8).slice(1,-1);
+	var accessticket=CryptoJS.AES.decrypt(localStorage.ticket, localStorage.employeeid).toString(CryptoJS.enc.Utf8).slice(1,-1);
+
+	$.ajax({
+		//url:localStorage.service+'downloadbeneficiary',
+		//url:"http://182.18.162.51/sg/beneficiarydownload.asmx/benficiarydownload",
+		url:service+"beneficiarydownload.asmx/loadgis",
+		type:"GET",
+		dataType:"json",
+		cache: false,
+		//jsonp:"callback",
+		headers: { 'token': accessticket, 'empcode': userid, uuid: device.uuid },
+		async:true,
+		//data:{empid:empidlocal, workitemcode:workitemcode, surveyworkitemmappingcode: surveyworkitemmappingcode, type:"MS", survey:survey, uuid:device.uuid},
+		ContentType:"application/json",
+		success: function(response, message, status)
+		{
+			if(status.status==200)
+			{
+				loadbengisdata=response[0];
+				insertorupdategisbendata();
+
+			}else if(status.status==401){SpinnerDialog.hide(); $("#loginmodal").modal("show")}
+			else if(status.status==511){navigator.notification.alert("Maps are not loaded", function(){SpinnerDialog.hide(); window.location.reload();}, 'Samuday 360','Done');}
+		},
+		error: function(err)
+		{
+			//console.log(err);
+			SpinnerDialog.hide();
+			if(err.status==401){$("#loginmodal").modal("show")}
+			else if(status.status==511){navigator.notification.alert("Maps are not loaded", function(){SpinnerDialog.hide(); window.location.reload();}, 'Samuday 360','Done');}	
+			else{navigator.notification.alert("Please try again", function(){}, 'Samuday 360','Done');}
+			// $("#sheduleing").modal("hide");
+		}
+	});
 }

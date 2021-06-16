@@ -44,8 +44,8 @@ $("#loginbutton").on('click', function(){
 							
 							
 							data={username:empid, password:$("#loginpwd").val(), uuid:device.uuid, lastsynced:downloadservertime, version:device.version, manufacturer:device.manufacturer, model:device.model, platform:device.platform};
-							//alert(JSON.stringify(data));
-
+							// alert(JSON.stringify(data));
+							// alert(service+"loginservice.asmx/EMPloginservice");
 							$.ajax({
 								url: service+"loginservice.asmx/EMPloginservice",
 								type:"POST",

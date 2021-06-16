@@ -37,7 +37,7 @@
     </style>
 
   </head>
-  <body onload="loaddata()">
+  <body>
     <main>
 
       <nav class="navbar navbar-expand-lg navbar-dark" style="background:#0b70b3;padding-top: 0px;padding-bottom: 0px;">
@@ -141,6 +141,9 @@
     e.preventDefault();
     window.location.href="home.html";
   }
+
+  $(document).ready(function(){ loaddata(); });
+
 </script>
 </body>
 </html>

@@ -19,14 +19,14 @@ $("#loginbutton").on('click', function(){
 			{ 
 				empid=$("#loginusername").val();
 
-				// var empid="";
+				var empid="";
 					
-				// if($("#loginusername").val()=="user1@hcl.com") {empid="51636763";}
-				// else if($("#loginusername").val()=="user2@hcl.com") {empid="51686937";}
-				// else if($("#loginusername").val()=="user3@hcl.com") {empid="51623721";}
-				// else if($("#loginusername").val()=="user4@hcl.com") {empid="51636841";}
-				// else if($("#loginusername").val()=="user5@hcl.com") {empid="51636843";}
-				// else if($("#loginusername").val()=="user6@hcl.com") {empid="51636844";}
+				if($("#loginusername").val()=="user1@hcl.com") {empid="51636763";}
+				else if($("#loginusername").val()=="user2@hcl.com") {empid="51686937";}
+				else if($("#loginusername").val()=="user3@hcl.com") {empid="51623721";}
+				else if($("#loginusername").val()=="user4@hcl.com") {empid="51636841";}
+				else if($("#loginusername").val()=="user5@hcl.com") {empid="51636843";}
+				else if($("#loginusername").val()=="user6@hcl.com") {empid="51636844";}
 					
 				
 				data={username:empid, password:$("#loginpwd").val(), uuid:device.uuid, lastsynced:downloadservertime, version:device.version, manufacturer:device.manufacturer, model:device.model, platform:device.platform};

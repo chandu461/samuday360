@@ -24,12 +24,12 @@ lastsynced="";
 updatedworkitems=[];
 function syncLoad()
 {
-
 	rootdetection.isDeviceRooted(function (result) {
 		if(result==0)
 		{
 			uploadstatusmethodname="syncing";
 			updatedworkitems=[];
+			lastsynced="";
 			var service=CryptoJS.AES.decrypt(localStorage.utilmedium, device.uuid).toString(CryptoJS.enc.Utf8).slice(1,-1);
 			var empidlocal=CryptoJS.AES.decrypt(localStorage.employeeid, device.uuid).toString(CryptoJS.enc.Utf8).slice(1,-1);
 
@@ -48,14 +48,15 @@ function syncLoad()
 					{
 						if(status.status==200)
 						{
-							if(response.length)
+							//if(response.length>0)
+							if(response[0].getalldtls.length>0)
 							{
 								if(response[0].getsinglevaldtls.length>0)
 								{
 									lastsynced=response[0].getsinglevaldtls[0].lastsynced;
 									questiontypes=response[0].getsinglevaldtls[0].questiontypes;
-									sh_roads_arr=response[0].getsinglevaldtls[0].sh_roads_arr;
-									gp_roads_arr=response[0].getsinglevaldtls[0].gp_roads_arr;
+									// sh_roads_arr=response[0].getsinglevaldtls[0].sh_roads_arr;
+									// gp_roads_arr=response[0].getsinglevaldtls[0].gp_roads_arr;
 									colsedworkitems=response[0].closedworkitemsdata;
 								}
 								if(response[0].getalldtls.length>0)
@@ -70,8 +71,7 @@ function syncLoad()
 
 								// UPLOAD & DOWNLOAD Response
 							}
-					
-							loadlocalresponces()
+							else{ loadlocalresponces(); }
 						}
 						else if(status.status==401){SpinnerDialog.hide(); $("#loginmodal").modal("show")}	
 					},
@@ -143,6 +143,7 @@ selectedbenfresponse='';
 selectedbenlist="";
 function uploadsurveyresponses()
 {
+	lastsynced="";
 	var service=CryptoJS.AES.decrypt(localStorage.utilmedium, device.uuid).toString(CryptoJS.enc.Utf8).slice(1,-1);
 	var empidlocal=CryptoJS.AES.decrypt(localStorage.employeeid, device.uuid).toString(CryptoJS.enc.Utf8).slice(1,-1);
 	var accessticket=CryptoJS.AES.decrypt(localStorage.ticket, localStorage.employeeid).toString(CryptoJS.enc.Utf8).slice(1,-1);
@@ -171,6 +172,7 @@ function uploadsurveyresponses()
 				{
 						if(status.status==200)
 						{
+							lastsynced=response[0].lastsynced;
 							if(response[0].employebenelist.length>0){
 								selectedbenlist=response[0].employebenelist;
 								removeselectedmonitbene()
@@ -197,7 +199,7 @@ function uploadsurveyresponses()
 
 function downloadsurveyresponses()
 {
-
+	lastsynced="";
 	rootdetection.isDeviceRooted(function (result) {
 		if(result==0)
 		{
@@ -221,6 +223,7 @@ function downloadsurveyresponses()
 					{
 						if(status.status==200)
 						{
+							lastsynced=response[0].lastsynced;
 							updateserverresponces=response;
 							updateserverresponcesfrom360();
 						}
@@ -237,5 +240,59 @@ function downloadsurveyresponses()
 				})
 			}else{navigator.notification.alert("Something went worng", function(){}, 'Samuday 360','Done');}
 		}else{navigator.notification.alert("Device doesn't Support", function(){}, 'Samuday 360','Done');}
-}, function (error) {navigator.notification.alert("Device doesn't Support", function(){}, 'Samuday 360','Done');});
+	}, function (error) {navigator.notification.alert("Device doesn't Support", function(){}, 'Samuday 360','Done');});
 }
+
+
+
+//================ workitem dowload IN Ajax =========================================
+	// sh_roads_arr=response[0].getsinglevaldtls[0].sh_roads_arr;
+	// gp_roads_arr=response[0].getsinglevaldtls[0].gp_roads_arr;
+
+//================= workitem dowload Local DB  =============================
+
+	// sh_roads_arrlen=sh_roads_arr.length;
+	// if(sh_roads_arrlen>0)
+	// {
+	// 	for(sh_roadsloop=0; sh_roadsloop<sh_roads_arrlen; sh_roadsloop++)
+	// 	{validationmastertrans.executeSql('INSERT INTO shroads(roadcode, geom) VALUES (?,?)',  [sh_roads_arr[sh_roadsloop].sh_code, sh_roads_arr[sh_roadsloop].st_astext]);}
+	// }
+
+	// gp_roads_arrlen=gp_roads_arr.length;
+	// if(gp_roads_arrlen>0)
+	// {
+	// 	for(gp_roadsloop=0; gp_roadsloop<gp_roads_arrlen; gp_roadsloop++)
+	// 	{validationmastertrans.executeSql('INSERT INTO gproads(roadcode, geom) VALUES (?,?)', [gp_roads_arr[gp_roadsloop].gpr_code, gp_roads_arr[gp_roadsloop].st_astext]);}
+	// }
+
+
+//=========================== Download benefi Ajax ===================================
+
+//=========================== Download benefi Local DB ===================================
+
+	// var loadbendataroadarray_villlen=loadbendata.roadarray_vill.length
+	// for(villroadloop=0; villroadloop<loadbendataroadarray_villlen; villroadloop++)
+	// {
+	// 	villroadset=loadbendata.roadarray_vill[villroadloop]
+	// 	sqlinsertorupdatebendatatrans.executeSql('INSERT INTO villageroads(roadcode, geom) VALUES (?,?)', [villroadset.road_code, villroadset.st_astext]);
+	// }
+
+	// var villboundrieslen=loadbendata.roadarray_villBOUNDRIES.length;
+	// for(villboundriesloop=0; villboundriesloop<villboundrieslen; villboundriesloop++)
+	// {
+	// 	villboundryset=loadbendata.roadarray_villBOUNDRIES[villboundriesloop]
+	// 	if(typeof villboundryset!="undefined")
+	// 	{
+	// 		sqlinsertorupdatebendatatrans.executeSql('INSERT INTO villageboundries(workitemscode, roadcode, villagename, geom) VALUES (?,?,?,?)', [workitemcode, villboundryset.road_code, villboundryset.villagename, villboundryset.st_astext]);
+	// 	}
+	// }
+	// var landmarklen=loadbendata.buildingtypegeom.length;
+	// for(landmarkloop=0; landmarkloop<landmarklen; landmarkloop++)
+	// {
+	// 	landmarkset=loadbendata.buildingtypegeom[landmarkloop]
+	// 	sqlinsertorupdatebendatatrans.executeSql('INSERT INTO landmarks(workitemscode, type, geom) VALUES (?,?,?)', [workitemcode, landmarkset.type, landmarkset.geom]);
+	// }
+
+	
+	// sqlinsertorupdatebendatatrans.executeSql('DELETE FROM syncdates WHERE surveyworkitemmapping=? AND service=?', [surveyworkitemmappingcode, "benficiarydownloadsavegis"]);
+	// sqlinsertorupdatebendatatrans.executeSql('INSERT INTO syncdates (service, surveyworkitemmapping, servertime, localtime, remark) VALUES (?,?,?,?,?)', ["benficiarydownloadsavegis", surveyworkitemmappingcode, lastsynced, timestamp, ""]);

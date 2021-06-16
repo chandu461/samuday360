@@ -61,27 +61,31 @@ $("#calendarbtn").on("click", function(){
 	$("#event-cal-container").toggle();
 })
 
+
+
+// syncdates
+
 function downloaddata()
 {
 	var path = window.location.pathname.split("/").pop();
 	if(path=="monitoringworkiteminfo.html"){SpinnerDialog.show("Samuday 360", "Loading Beneficiaries...", true);}
 	else if(path=="baselineworkiteminfo.html"){SpinnerDialog.show("Samuday 360", "Loading Respondents...", true);}
-	
+
+	loadlocations()
+
 	var networkState = navigator.connection.type;
 	if(networkState!=Connection.NONE)
 	{
+		lastsynced="";
 		uploadstatusmethodname="downloaddata";
 		var service=CryptoJS.AES.decrypt(localStorage.utilmedium, device.uuid).toString(CryptoJS.enc.Utf8).slice(1,-1);
-		
 		surveyworkitemmappingcode=CryptoJS.AES.decrypt(localStorage.surveyworkitemmappingcode, localStorage.employeeid).toString(CryptoJS.enc.Utf8).slice(1,-1);
 		survey=CryptoJS.AES.decrypt(localStorage.survey, localStorage.employeeid).toString(CryptoJS.enc.Utf8).slice(1,-1);
 		workitemcode=CryptoJS.AES.decrypt(localStorage.workitem, localStorage.employeeid).toString(CryptoJS.enc.Utf8).slice(1,-1);
-		
 		var empidlocal=CryptoJS.AES.decrypt(localStorage.employeeid, device.uuid).toString(CryptoJS.enc.Utf8).slice(1,-1);
-
 		var userid=CryptoJS.AES.decrypt(localStorage.employeeid, device.uuid).toString(CryptoJS.enc.Utf8).slice(1,-1);
 		var accessticket=CryptoJS.AES.decrypt(localStorage.ticket, localStorage.employeeid).toString(CryptoJS.enc.Utf8).slice(1,-1);
-		
+		// alert(JSON.stringify({empid:empidlocal, workitemcode:workitemcode, surveyworkitemmappingcode: surveyworkitemmappingcode, type:"MS", survey:survey, lastsynced:mislastdate, uuid:device.uuid}));
 		if(service!="")
 		{
 			$.ajax({
@@ -91,21 +95,27 @@ function downloaddata()
 				cache: false,
 				headers: { 'token': accessticket, 'empcode': userid, uuid: device.uuid },
 				async:true,
-				data:{empid:empidlocal, workitemcode:workitemcode, surveyworkitemmappingcode: surveyworkitemmappingcode, type:"MS", survey:survey, uuid:device.uuid},
+				data:{empid:empidlocal, workitemcode:workitemcode, surveyworkitemmappingcode: surveyworkitemmappingcode, type:"MS", survey:survey, lastsynced:mislastdate, uuid:device.uuid},
 				ContentType:"application/json",
 				success: function(response, message, status)
 				{
+
 					if(status.status==200)
 					{
 						loadbendata=response[0];
+						lastsynced=response[0].lastsynced;
+						// alert(Object.keys(response[0]));
 						insertorupdatebendata();
 						//userSync();
 					}else if(status.status==401){SpinnerDialog.hide(); $("#loginmodal").modal("show")}
+					else if(status.status==511){navigator.notification.alert("Data not loaded", function(){SpinnerDialog.hide();}, 'Samuday 360','Done');}
 				},
 				error: function(err)
 				{
+					// alert(JSON.stringify(err));
 					SpinnerDialog.hide();
 					if(err.status==401){$("#loginmodal").modal("show")}
+					else if(err.status==511){navigator.notification.alert("Data not loaded", function(){SpinnerDialog.hide();}, 'Samuday 360','Done');}
 					else{navigator.notification.alert("Please try again", function(){}, 'Samuday 360','Done');}
 				}
 			});
@@ -124,6 +134,8 @@ function downloadstatusdata()
 {
 	uploadstatusmethodname="downloadstatusdata";
 	SpinnerDialog.show("Samuday 360", "Loading Selected...", true);
+
+
 	var empidlocalstorege=localStorage.employeeid
 
 	var service=CryptoJS.AES.decrypt(localStorage.utilmedium, device.uuid).toString(CryptoJS.enc.Utf8).slice(1,-1);
@@ -169,4 +181,54 @@ function downloadstatusdata()
 }
 
 
-function downloaddataloginform(){downloaddata(); /*$("#downloadbenloginmodal").modal("show")*/;}
+function downloaddataloginform(){ $("#downloadben").attr("disabled", true); getdownloadbentime();/*downloaddata();*/  /*$("#downloadbenloginmodal").modal("show")*/;}
+
+
+
+
+function loadgisdata()
+{
+	// alert(JSON.stringify(benfdownlocation));
+	loadbengisdata="";
+	lastsynced="";
+	var service=CryptoJS.AES.decrypt(localStorage.utilmedium, device.uuid).toString(CryptoJS.enc.Utf8).slice(1,-1);
+	
+	var userid=CryptoJS.AES.decrypt(localStorage.employeeid, device.uuid).toString(CryptoJS.enc.Utf8).slice(1,-1);
+
+	var accessticket=CryptoJS.AES.decrypt(localStorage.ticket, localStorage.employeeid).toString(CryptoJS.enc.Utf8).slice(1,-1);
+
+	$.ajax({
+		url:service+"gisservice.asmx/loadgis",
+		type:"GET",
+		dataType:"json",
+		cache: false,
+		//jsonp:"callback",
+		 // lastsynced: gislastdate,
+		headers: { 'token': accessticket, 'empcode': userid, uuid: device.uuid },
+		async:true,
+		data:{locationdtls:JSON.stringify(benfdownlocation)},
+		ContentType:"application/json",
+		success: function(response, message, status)
+		{
+			if(status.status==200)
+			{
+				loadbengisdata=response[0];
+				lastsynced=response[0].lastsynced;
+				// alert(response[0].lastsynced);
+				insertorupdategisbendata();
+
+			}else if(status.status==401){SpinnerDialog.hide(); $("#loginmodal").modal("show")}
+			else if(status.status==511){navigator.notification.alert("Maps are not loaded", function(){SpinnerDialog.hide(); window.location.reload();}, 'Samuday 360','Done');}
+		},
+		error: function(err)
+		{
+			//console.log(err);
+			// alert(JSON.stringify(err));
+			SpinnerDialog.hide();
+			if(err.status==401){$("#loginmodal").modal("show")}
+			else if(err.status==511){navigator.notification.alert("Only MIS data loaded Successfully", function(){SpinnerDialog.hide(); window.location.reload();}, 'Samuday 360','Done');}
+			else{navigator.notification.alert("Please try again", function(){}, 'Samuday 360','Done');}
+			// $("#sheduleing").modal("hide");
+		}
+	});
+}

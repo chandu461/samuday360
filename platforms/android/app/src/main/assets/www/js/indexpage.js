@@ -10,10 +10,10 @@ $("#loginbutton").on('click', function(){
 			SpinnerDialog.show("Samuday 360", "Verifying user ...", true);
 			
 			// localStorage.utilmedium=CryptoJS.AES.encrypt('"https://182.18.181.115/appssl"', device.uuid);
-			// localStorage.utilmedium=CryptoJS.AES.encrypt('"https://182.18.181.115:4433/"', device.uuid);
+			localStorage.utilmedium=CryptoJS.AES.encrypt('"https://182.18.181.115:4433/"', device.uuid);
 			// localStorage.utilmedium=CryptoJS.AES.encrypt('"http://182.18.181.115:8087/"', device.uuid);
 			// localStorage.utilmedium=CryptoJS.AES.encrypt('"http://182.18.162.51/sg/"', device.uuid);
-			localStorage.utilmedium=CryptoJS.AES.encrypt('"https://10.99.18.180:4433/Samudayandroid/"', device.uuid);
+			// localStorage.utilmedium=CryptoJS.AES.encrypt('"https://10.99.18.180:4433/Samudayandroid/"', device.uuid);
 			// localStorage.utilmedium=CryptoJS.AES.encrypt('"https://10.99.18.180/Samudayandroid/"', device.uuid);
 			// localStorage.utilmedium=CryptoJS.AES.encrypt('"https://10.99.18.181/"', device.uuid);
 			// localStorage.utilmedium=CryptoJS.AES.encrypt('"https://10.99.18.180:90/Samudayandroid/"', device.uuid);
@@ -33,19 +33,19 @@ $("#loginbutton").on('click', function(){
 						{
 							empid=$("#loginusername").val();
 
-							// var empid="";
+							var empid="";
 							
-							// if($("#loginusername").val()=="user1@hcl.com") {empid="51636763";}
-							// else if($("#loginusername").val()=="user2@hcl.com") {empid="51686937";}
-							// else if($("#loginusername").val()=="user3@hcl.com") {empid="51623721";}
-							// else if($("#loginusername").val()=="user4@hcl.com") {empid="51636841";}
-							// else if($("#loginusername").val()=="user5@hcl.com") {empid="51636843";}
-							// else if($("#loginusername").val()=="user6@hcl.com") {empid="51636844";}
+							if($("#loginusername").val()=="user1@hcl.com") {empid="51636763";}
+							else if($("#loginusername").val()=="user2@hcl.com") {empid="51686937";}
+							else if($("#loginusername").val()=="user3@hcl.com") {empid="51623721";}
+							else if($("#loginusername").val()=="user4@hcl.com") {empid="51636841";}
+							else if($("#loginusername").val()=="user5@hcl.com") {empid="51636843";}
+							else if($("#loginusername").val()=="user6@hcl.com") {empid="51636844";}
 							
 							
 							data={username:empid, password:$("#loginpwd").val(), uuid:device.uuid, lastsynced:downloadservertime, version:device.version, manufacturer:device.manufacturer, model:device.model, platform:device.platform};
-							//alert(JSON.stringify(data));
-
+							// alert(JSON.stringify(data));
+							// alert(service+"loginservice.asmx/EMPloginservice");
 							$.ajax({
 								url: service+"loginservice.asmx/EMPloginservice",
 								type:"POST",

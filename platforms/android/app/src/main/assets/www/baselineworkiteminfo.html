@@ -91,7 +91,8 @@
 
     </style>
   </head>
-  <body onload="getWorkItemDetails()">
+  <!-- onload="getWorkItemDetails()" -->
+  <body>
     <main>
 
       <nav class="navbar navbar-expand-lg navbar-dark" style="background:#0b70b3;padding-top: 0px;padding-bottom: 0px;"> 
@@ -140,7 +141,7 @@
     <div class="col-sm-12 card odd" style=" height: 340px;" >
       <div class="card-body">
         <h6 class="card-title" id="surveyname"></h6>
-        <span class="fa fa-download" style="margin-top: -29px; display:none;" id="downloadben" onclick="downloaddataloginform()"></span>
+        <span class="fa fa-download" style="margin-top: -29px;" id="downloadben" onclick="downloaddataloginform()"></span>
         <p class="card-text" style="font-style: italic;" id="surveylocations"></p>
 
 
@@ -306,7 +307,7 @@
 <script src="js/indexpagevalidation.js"></script>
 <script src="js/samudaypagelogin.js"></script>
 <script src='js/localdb.js'></script>
-<script src="js/workiteminfo.js"></script>
+<!-- <script src="js/workiteminfo.js"></script> -->
 <script src="js/sync.js"></script>
 <script src="js/surveybtnaction.js"></script>
 <script src="js/toolbaraction.js"></script>
@@ -320,6 +321,9 @@
     e.preventDefault();
     window.location.href="dashboard.html";
   }
+
+  $(document).ready(function(){ getWorkItemDetails(); });
+
 </script>
 </body>
 </html>

@@ -168,7 +168,6 @@ function syncdate()
 			if(result==0)
 			{
 				SpinnerDialog.show("Samuday 360", "Syncing...", true);
-
 				//var db = window.openDatabase("Database", "1.0", "samuday360android", 2000000);
 				var db =window.sqlitePlugin.openDatabase({ name: 'samuday360android.db', location: 'default', androidDatabaseProvider: 'system' });
 		    	db.transaction(sqlsyncdate, errorCB, syncLoad);
@@ -181,14 +180,18 @@ function syncdate()
 	
 function sqlsyncdate(createtransaction)
 {
-	createtransaction.executeSql('CREATE TABLE IF NOT EXISTS syncdates (remark, uploadservertime, uploadlocaltime, downloadservertime, downloadlocaltime)');
+	//createtransaction.executeSql('CREATE TABLE IF NOT EXISTS syncdates (remark, uploadservertime, uploadlocaltime, downloadservertime, downloadlocaltime)');
+	createtransaction.executeSql('CREATE TABLE IF NOT EXISTS syncdates (service, surveyworkitemmapping, servertime, localtime, remark)');
 	createtransaction.executeSql('CREATE TABLE IF NOT EXISTS workitems (workitemcode,  workitemname, workitemdesc, workitemtype, parentworkitemcode, planstartdate, planenddate, actualstartdate, primaryowner, percentagecompleted, displayorder, surveyworkitemmappingcode, target, createdby, surveycode, frequncy)');
 	createtransaction.executeSql('CREATE TABLE IF NOT EXISTS monitoringsurveydates (surveyworkitemmappingcode, surveycode, startdate, enddate, frequency, fromsurveydate, tosurveydate, status, createddate)');
 	createtransaction.executeSql('CREATE TABLE IF NOT EXISTS locations (workitemscode, locationcode, locationname, locationtype)');
 	createtransaction.executeSql('CREATE TABLE IF NOT EXISTS survey (workitemscode, surveycode, surveyname, surveydesc, sectorcode, questionsetcode, createdby, createdon, type, frequency, startdate, enddate, programcode, interventioncode)');
-	createtransaction.executeSql('CREATE TABLE IF NOT EXISTS mmpbenfi (surveyworkitemmappingcode, surveycode,resondantcode,respondantname,gender,hohname,relationwithhoh,occupation,dateofbirth,block,grampanchayat,village, buildingcode, housecode,  buildingtype, geom, surveydate, updatedon, empid, empname, status)');
+	createtransaction.executeSql('CREATE TABLE IF NOT EXISTS mmpbenfimis (surveyworkitemmappingcode, surveycode, resondantcode, respondantname, gender, hohname, relationwithhoh, occupation, dateofbirth, block, grampanchayat, village, buildingcode, housecode,  buildingtype, surveydate, updatedon, empid, empname, status)');
+	createtransaction.executeSql('CREATE TABLE IF NOT EXISTS mmpbenfigis (gissurveyworkitemmappingcode, gisbuildingcode, geom, gisstatus)');
+	
+	//createtransaction.executeSql('CREATE TABLE IF NOT EXISTS mmpbenfi (surveyworkitemmappingcode, surveycode,resondantcode,respondantname,gender,hohname,relationwithhoh,occupation,dateofbirth,block,grampanchayat,village, buildingcode, housecode,  buildingtype, geom, surveydate, updatedon, empid, empname, status)');
 	createtransaction.executeSql('CREATE TABLE IF NOT EXISTS mmp_ms_benf (surveyworkitemmappingcode, surveycode, respondantcode, fromdate, todate, status, updatedon, empid, empname )');
-	createtransaction.executeSql('CREATE VIEW IF NOT EXISTS ms_mmp_benf_selected AS SELECT mmpbenfi.surveyworkitemmappingcode, mmpbenfi.surveycode, mmpbenfi.resondantcode, mmp_ms_benf.empid, mmp_ms_benf.empname, mmpbenfi.respondantname, mmpbenfi.gender, mmpbenfi.hohname, mmpbenfi.relationwithhoh, mmpbenfi.occupation, mmpbenfi.dateofbirth, mmpbenfi.block, mmpbenfi.grampanchayat, mmpbenfi.village, mmpbenfi.buildingcode, mmpbenfi.housecode,  mmpbenfi.buildingtype, mmpbenfi.geom, mmp_ms_benf.fromdate, mmp_ms_benf.todate, mmp_ms_benf.status FROM mmp_ms_benf LEFT JOIN mmpbenfi ON mmp_ms_benf.respondantcode=mmpbenfi.resondantcode AND mmp_ms_benf.surveyworkitemmappingcode=mmpbenfi.surveyworkitemmappingcode AND mmp_ms_benf.surveycode=mmpbenfi.surveycode');
+	
 	createtransaction.executeSql('CREATE TABLE IF NOT EXISTS questiontypes (questiontypecode, questiontype)');
 	createtransaction.executeSql('CREATE TABLE IF NOT EXISTS questions (workitemscode, surveycode, sectioncode, sectiondisplayorder INTEGER, questiondisplayorder INTEGER,  questioncode, questiontext, sectionname, validationtypecode, questiontypecode, questiontype, haschildquestion, parentquestion, conditionvalue, controltype, questionlevel, hasoptions, optionid, childquestionconditionid, helptext, frequencyofquestions, numberoftimes, frequencystartdate, sectorcode, programcode, interventioncode, categoryid, suggestivetext)');
 	createtransaction.executeSql('CREATE TABLE IF NOT EXISTS questionoptions (workitemscode, surveycode, questioncode, displaytext, displayvalue, displayorder INTEGER)');
@@ -201,16 +204,31 @@ function sqlsyncdate(createtransaction)
 	createtransaction.executeSql('CREATE TABLE IF NOT EXISTS villageroads(roadcode, geom)');
 	createtransaction.executeSql('CREATE TABLE IF NOT EXISTS villageboundries(workitemscode,roadcode, villagename, geom)');
 	createtransaction.executeSql('CREATE TABLE IF NOT EXISTS landmarks(workitemscode, type, geom)');
-	createtransaction.executeSql('SELECT uploadservertime, uploadlocaltime, downloadservertime, downloadlocaltime FROM syncdates',[], function(lastsync, results)
+	
+	// createtransaction.executeSql('INSERT INTO mmpbenfimis (surveyworkitemmappingcode, surveycode, resondantcode, respondantname, gender, hohname, relationwithhoh, occupation, dateofbirth, block, grampanchayat, village, buildingcode, housecode,  buildingtype, surveydate, updatedon, empid, empname, status) VALUES ("0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",  "0", "0", "0", "0", "0", "0")');
+	// createtransaction.executeSql('INSERT INTO mmpbenfigis (surveyworkitemmappingcode, buildingcode, geom, status) VALUES (surveyworkitemmappingcode, "0", "0", "0")');
+	
+	// createtransaction.executeSql('CREATE VIEW IF NOT EXISTS mmpbenfi AS SELECT mmpbenfimis.surveyworkitemmappingcode, mmpbenfimis.surveycode, mmpbenfimis.resondantcode, mmpbenfimis.respondantname, mmpbenfimis.gender, mmpbenfimis.hohname, mmpbenfimis.relationwithhoh, mmpbenfimis.occupation, mmpbenfimis.dateofbirth, mmpbenfimis.block, mmpbenfimis.grampanchayat, mmpbenfimis.village, mmpbenfimis.buildingcode, mmpbenfimis.housecode,  mmpbenfimis.buildingtype, mmpbenfimis.surveydate, mmpbenfimis.updatedon, mmpbenfimis.empid, mmpbenfimis.empname, mmpbenfimis.status as status, mmpbenfigis.geom, mmpbenfigis.status as gistatus WHERE mmpbenfimis.surveyworkitemmappingcode=mmpbenfigis.surveyworkitemmappingcode AND mmpbenfimis.buildingcode=mmpbenfigis.buildingcode');
+	createtransaction.executeSql('CREATE VIEW IF NOT EXISTS mmpbenfi AS SELECT surveyworkitemmappingcode, surveycode, resondantcode, respondantname, gender, hohname, relationwithhoh, occupation, dateofbirth, block, grampanchayat, village, buildingcode, housecode,  buildingtype, surveydate, updatedon, empid, empname, status, geom, gisstatus FROM mmpbenfimis  LEFT JOIN mmpbenfigis ON mmpbenfimis.surveyworkitemmappingcode=mmpbenfigis.gissurveyworkitemmappingcode AND mmpbenfimis.buildingcode=mmpbenfigis.gisbuildingcode');
+	createtransaction.executeSql('CREATE VIEW IF NOT EXISTS ms_mmp_benf_selected AS SELECT mmpbenfi.surveyworkitemmappingcode as surveyworkitemmappingcode, mmpbenfi.surveycode, mmpbenfi.resondantcode, mmp_ms_benf.empid, mmp_ms_benf.empname, mmpbenfi.respondantname, mmpbenfi.gender, mmpbenfi.hohname, mmpbenfi.relationwithhoh, mmpbenfi.occupation, mmpbenfi.dateofbirth, mmpbenfi.block, mmpbenfi.grampanchayat, mmpbenfi.village, mmpbenfi.buildingcode, mmpbenfi.housecode,  mmpbenfi.buildingtype, mmpbenfi.geom, mmp_ms_benf.fromdate, mmp_ms_benf.todate, mmp_ms_benf.status FROM mmp_ms_benf LEFT JOIN mmpbenfi ON mmp_ms_benf.respondantcode=mmpbenfi.resondantcode AND mmp_ms_benf.surveyworkitemmappingcode=mmpbenfi.surveyworkitemmappingcode AND mmp_ms_benf.surveycode=mmpbenfi.surveycode');
+	
+	// mmpbenfimis.surveyworkitemmappingcode, mmpbenfimis.surveycode, mmpbenfimis.resondantcode, mmpbenfimis.respondantname, mmpbenfimis.gender, mmpbenfimis.hohname, mmpbenfimis.relationwithhoh, mmpbenfimis.occupation, mmpbenfimis.dateofbirth, mmpbenfimis.block, mmpbenfimis.grampanchayat, mmpbenfimis.village, mmpbenfimis.buildingcode, mmpbenfimis.housecode,  mmpbenfimis.buildingtype, mmpbenfimis.surveydate, mmpbenfimis.updatedon, mmpbenfimis.empid, mmpbenfimis.empname, mmpbenfimis.status
+	createtransaction.executeSql('SELECT service, servertime, localtime FROM syncdates',[], function(lastsync, results)
 	{
 		if(results.rows.length>0)
 		{
 			//alert(JSON.stringify(results.rows.item(0)));
-			uploadservertime=results.rows.item(0).uploadservertime;
-			uploadlocaltime=results.rows.item(0).uploadlocaltime;
-			downloadservertime=results.rows.item(0).downloadservertime;
-			downloadlocaltime=results.rows.item(0).downloadlocaltime;
-		}else{lastsync.executeSql('INSERT INTO syncdates (remark) VALUES ("row")');}
+			uploadservertime=results.rows.item(0).servertime;
+			uploadlocaltime=results.rows.item(0).localtime;
+			downloadservertime=results.rows.item(0).servertime;
+			downloadlocaltime=results.rows.item(0).localtime;
+		}else{
+			// lastsync.executeSql('INSERT INTO syncdates (service) VALUES ("row")');
+			lastsync.executeSql('INSERT INTO syncdates (service) VALUES ("empworkitemdetails")');
+			lastsync.executeSql('INSERT INTO syncdates (service) VALUES ("sdnew")');
+			lastsync.executeSql('INSERT INTO syncdates (service) VALUES ("updatebeneficiarynew")');
+
+		}
 	});
 	
 }
@@ -268,7 +286,7 @@ function syncDownload()
 			{
 				// var db = window.openDatabase("Database", "1.0", "samuday360android", 2000000);
 				var db =window.sqlitePlugin.openDatabase({ name: 'samuday360android.db', location: 'default', androidDatabaseProvider: 'system' });
-		    	db.transaction(addValidationMaster, errorCB);
+		    	db.transaction(addValidationMaster, errorCB, loadlocalresponces);
 		    }else{navigator.notification.alert("Device doesn't Support", function(){}, 'Samuday 360','Done');}
 		}, function (error) {navigator.notification.alert("Device doesn't Support", function(){}, 'Samuday 360','Done');});
 	}, 60);
@@ -297,16 +315,15 @@ function addsuccess()
 			$("#enterpinform").hide();
 			$("#attendanceform").hide();
 		}else if(path=="selectsbeneficiary.html"){
-			setTimeout(function(){window.location.href="monitoringworkiteminfo.html";},1000)
+			setTimeout(function(){window.location.href="monitoringworkiteminfo.html";},100)
 		}
-		else{setTimeout(function(){SpinnerDialog.hide(); window.location.reload();},2000)}
+		else{setTimeout(function(){SpinnerDialog.hide(); window.location.reload();},100)}
 	}, 'Samuday 360','Done');
 }
 
 // Create OR Update ValidationMaster
 function addValidationMaster(validationmastertrans)
 {
-
 	questiontypesarry=questiontypes.length;
 	if(questiontypesarry>0)
 	{
@@ -314,19 +331,19 @@ function addValidationMaster(validationmastertrans)
 		{validationmastertrans.executeSql('INSERT INTO questiontypes (questiontypecode, questiontype) VALUES (?, ?)', [questiontypes[loop].questiontypecode, questiontypes[loop].questiontype]);}	
 	}
 	
-	sh_roads_arrlen=sh_roads_arr.length;
-	if(sh_roads_arrlen>0)
-	{
-		for(sh_roadsloop=0; sh_roadsloop<sh_roads_arrlen; sh_roadsloop++)
-		{validationmastertrans.executeSql('INSERT INTO shroads(roadcode, geom) VALUES (?,?)',  [sh_roads_arr[sh_roadsloop].sh_code, sh_roads_arr[sh_roadsloop].st_astext]);}
-	}
+	// sh_roads_arrlen=sh_roads_arr.length;
+	// if(sh_roads_arrlen>0)
+	// {
+	// 	for(sh_roadsloop=0; sh_roadsloop<sh_roads_arrlen; sh_roadsloop++)
+	// 	{validationmastertrans.executeSql('INSERT INTO shroads(roadcode, geom) VALUES (?,?)',  [sh_roads_arr[sh_roadsloop].sh_code, sh_roads_arr[sh_roadsloop].st_astext]);}
+	// }
 
-	gp_roads_arrlen=gp_roads_arr.length;
-	if(gp_roads_arrlen>0)
-	{
-		for(gp_roadsloop=0; gp_roadsloop<gp_roads_arrlen; gp_roadsloop++)
-		{validationmastertrans.executeSql('INSERT INTO gproads(roadcode, geom) VALUES (?,?)', [gp_roads_arr[gp_roadsloop].gpr_code, gp_roads_arr[gp_roadsloop].st_astext]);}
-	}
+	// gp_roads_arrlen=gp_roads_arr.length;
+	// if(gp_roads_arrlen>0)
+	// {
+	// 	for(gp_roadsloop=0; gp_roadsloop<gp_roads_arrlen; gp_roadsloop++)
+	// 	{validationmastertrans.executeSql('INSERT INTO gproads(roadcode, geom) VALUES (?,?)', [gp_roads_arr[gp_roadsloop].gpr_code, gp_roads_arr[gp_roadsloop].st_astext]);}
+	// }
 
 	addWorkItems(validationmastertrans);
 }
@@ -348,14 +365,35 @@ function addWorkItems(addworkitemtrans)
 		addworkitemtrans.executeSql("DELETE FROM workitemsserverstatus WHERE workitemmmpcode=?", [colsedworkitems[closedworkitesloop].workitemcode]);
 
 		addworkitemtrans.executeSql("DELETE FROM monitoringsurveydates WHERE  surveyworkitemmappingcode=?", [colsedworkitems[closedworkitesloop].surveymappingcode]);
-		addworkitemtrans.executeSql("DELETE FROM mmpbenfi WHERE  surveyworkitemmappingcode=?", [colsedworkitems[closedworkitesloop].surveymappingcode]);
+		addworkitemtrans.executeSql("DELETE FROM mmpbenfimis WHERE  surveyworkitemmappingcode=?", [colsedworkitems[closedworkitesloop].surveymappingcode]);
+		addworkitemtrans.executeSql("DELETE FROM mmpbenfigis WHERE  surveyworkitemmappingcode=?", [colsedworkitems[closedworkitesloop].surveymappingcode]);
 		addworkitemtrans.executeSql("DELETE FROM mmp_ms_benf WHERE   surveyworkitemmappingcode=?", [colsedworkitems[closedworkitesloop].surveymappingcode]);
 		addworkitemtrans.executeSql("DELETE FROM surveyparentresponse WHERE   surveyworkitemmappingcode=?", [colsedworkitems[closedworkitesloop].surveymappingcode]);
 		addworkitemtrans.executeSql("DELETE FROM surveychildresponse WHERE   surveyworkitemmappingcode=?", [colsedworkitems[closedworkitesloop].surveymappingcode]);
-		
+		addworkitemtrans.executeSql('DELETE FROM syncdates WHERE surveyworkitemmapping=?', [colsedworkitems[closedworkitesloop].surveymappingcode]);
 	}
 
+		//=====   Remove All workitems  ======================
+		addworkitemtrans.executeSql("DELETE FROM questiontypes", []);
+		addworkitemtrans.executeSql("DELETE FROM workitems", []);
+		addworkitemtrans.executeSql("DELETE FROM locations", []);
+		addworkitemtrans.executeSql("DELETE FROM survey", []);
+		addworkitemtrans.executeSql("DELETE FROM questions", []);
+		addworkitemtrans.executeSql("DELETE FROM questionoptions", []);
+		addworkitemtrans.executeSql("DELETE FROM validations", []);
+		addworkitemtrans.executeSql("DELETE FROM workitemsserverstatus", []);
+		addworkitemtrans.executeSql("DELETE FROM monitoringsurveydates", []);
+		// addworkitemtrans.executeSql("DELETE FROM mmpbenfimis", []);
+		// addworkitemtrans.executeSql("DELETE FROM mmpbenfigis", []);
+		// addworkitemtrans.executeSql("DELETE FROM mmp_ms_benf", []);
+		// addworkitemtrans.executeSql("DELETE FROM surveyparentresponse", []);
+		// addworkitemtrans.executeSql("DELETE FROM surveychildresponse", []);
+		// addworkitemtrans.executeSql('DELETE FROM syncdates', []);
+		//=====   Remove All workitems  ======================
+	
 
+	// var freqarry=["100", "101", "102", "103", "127"];
+	// && (freqarry.indexOf(workitemset.frequncy)>=0)
 
 	if(workitemsarry>0)
 	{
@@ -370,17 +408,19 @@ function addWorkItems(addworkitemtrans)
 			{
 				msdate = new Date(workitemset.startdate.slice(0,10));
 				enddate= new Date(workitemset.endddate.slice(0,10));
-
 				msfrequency=0;
+
 				if(workitemset.frequncy=="100"){msfrequency=1}
 				else if(workitemset.frequncy=="101"){msfrequency=2}
 				else if(workitemset.frequncy=="102"){msfrequency=7}
 				else if(workitemset.frequncy=="103"){msfrequency=15}
 				else if(workitemset.frequncy=="127"){msfrequency=30}
 
+
 				msdates=[]
 				lastdate = msdate.toISOString().slice(0,10);
 				var mscount=0;
+				
 				while(enddate>=msdate)
 				{
 					msdate.setDate(msdate.getDate() + msfrequency);
@@ -392,7 +432,7 @@ function addWorkItems(addworkitemtrans)
 						addworkitemtrans.executeSql('INSERT INTO workitemsserverstatus(workitemmmpcode, target, fromdate, open, saved, submitted, synced) VALUES (?, ?, ?, ?, ?, ?, ?)', [workitemset.wrkitem, workitems[loop].status[0].target, lastdate, workitems[loop].status[0].open, workitems[loop].status[0].saved, workitems[loop].status[0].submitted, workitems[loop].status[0].synced]);
 						mscount++;
 					}
-					lastdate = msdate.toISOString().slice(0,10);
+					lastdate = msdate.toISOString().slice(0,10);					
 				}
 				if(mscount==0){
 					msdates.push(workitemset.startdate.slice(0,10))
@@ -419,7 +459,7 @@ function addWorkItems(addworkitemtrans)
 				for(qoloop=0; qoloop<questionoptionsarray; qoloop++)
 				{addworkitemtrans.executeSql('INSERT INTO questionoptions (workitemscode, surveycode, questioncode, displaytext, displayvalue, displayorder) VALUES (?, ?, ?, ?, ?, ?)', [workitemset.wrkitem, surveyset.surveycode, questionoptions[qoloop].questioncode, questionoptions[qoloop].displaytext, questionoptions[qoloop].displayvalue, questionoptions[qoloop].displayorder]);}
 			}
-
+			
 			addworkitemtrans.executeSql('INSERT INTO workitems (workitemcode, workitemname, workitemdesc, workitemtype, parentworkitemcode, planstartdate, planenddate, actualstartdate, primaryowner, percentagecompleted, displayorder, surveyworkitemmappingcode, target, createdby, surveycode, frequncy) VALUES  (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',  [workitemset.wrkitem, workitemset.workitemname, workitemset.workitemdesc, workitemset.workitemtype, workitemset.parentworkitemcode, workitemset.planstartdate, workitemset.planenddate, workitemset.actualstartdate, workitemset.primaryowner, workitemset.percentagecompleted, workitemset.displayorder, workitemset.surveyworkitemmappingcode, workitemset.target, workitemset.createdby, workitemset.surveycode, workitemset.frequncy]);
 			if(workitemset.surveycode!=null && workitemset.surveycode!="null" && workitemset.surveycode!="")
 			{
@@ -429,6 +469,7 @@ function addWorkItems(addworkitemtrans)
 			{
 				addworkitemtrans.executeSql('INSERT INTO locations (workitemscode, locationcode, locationname,locationtype) VALUES (?, ?, ?, ?)',  [workitemset.wrkitem, workitems[loop].locations[locationloop].locationcode, workitems[loop].locations[locationloop].locationname, workitems[loop].locations[locationloop].locationtype]);
 			}
+			
 			for(questionloop=0; questionloop<workitems[loop].questions.length; questionloop++)
 			{
 				questionset=workitems[loop].questions[questionloop];
@@ -438,10 +479,12 @@ function addWorkItems(addworkitemtrans)
 			}
 		}	
 	}
-	
-	workitemsupdated(addworkitemtrans);
 
-	addworkitemtrans.executeSql('UPDATE syncdates SET uploadservertime=?, uploadlocaltime=?, downloadservertime=?, downloadlocaltime=?', [lastsynced, timestamp, lastsynced, timestamp]);
+	workitemsupdated(addworkitemtrans);
+	if(lastsynced!="")
+	{
+		addworkitemtrans.executeSql('UPDATE syncdates SET servertime=?, localtime=? WHERE service=?', [lastsynced, timestamp, "empworkitemdetails"]);
+	}
 }
 
 
@@ -535,8 +578,8 @@ function pageloadedsuccess()
 }
 function sqlGetWorkItemList(worikitemlisttrans)
 {
-	worikitemlisttrans.executeSql('SELECT downloadlocaltime FROM syncdates', [], function(downloadtrans, lastsynceddateslocal){
-		if(typeof lastsynceddateslocal.rows.item(0).downloadlocaltime !="undefined" || lastsynceddateslocal.rows.item(0).downloadlocaltime!="" ){$("#lastsynceddate").html(new Date(lastsynceddateslocal.rows.item(0).downloadlocaltime).toISOString().slice(0, 10)+"   "+new Date(lastsynceddateslocal.rows.item(0).downloadlocaltime).toISOString().slice(11, 19));}else{$("#lastsynceddate").html("Not Synced Yet");}}, errorCB);
+	worikitemlisttrans.executeSql('SELECT localtime FROM syncdates', [], function(downloadtrans, lastsynceddateslocal){
+		if(typeof lastsynceddateslocal.rows.item(0).downloadlocaltime !="undefined" || lastsynceddateslocal.rows.item(0).downloadlocaltime!="" ){$("#lastsynceddate").html(new Date(lastsynceddateslocal.rows.item(0).localtime).toISOString().slice(0, 10)+"   "+new Date(lastsynceddateslocal.rows.item(0).localtime).toISOString().slice(11, 19));}else{$("#lastsynceddate").html("Not Synced Yet");}}, errorCB);
 	worikitemlisttrans.executeSql('SELECT workitemcode, workitemname, planstartdate, planenddate, actualstartdate, surveyworkitemmappingcode, surveycode, (SELECT surveyname FROM survey WHERE survey.surveycode=workitems.surveycode) as surveyname, (SELECT type FROM survey WHERE survey.surveycode=workitems.surveycode) as type, (SELECT sectorcode FROM survey WHERE survey.surveycode=workitems.surveycode) as sectorcode, (SELECT programcode FROM survey WHERE survey.surveycode=workitems.surveycode) as programcode, (SELECT interventioncode FROM survey WHERE survey.surveycode=workitems.surveycode) as interventioncode, displayorder,  frequncy FROM workitems ORDER BY displayorder DESC', [], resultWorkItemList, errorCB);
 }
 
@@ -653,6 +696,7 @@ function sqlmonitoringlistdates(monitoringlistdatestrans, results)
 
 function resultWorkItemDetails(workItemDetailstrans, results)
 {
+	var downloadstatus=0;
 	var surveybenfdate=(new Date()).toISOString().slice(0,10);
 	var empidlocal=CryptoJS.AES.decrypt(localStorage.employeeid, device.uuid).toString(CryptoJS.enc.Utf8).slice(1,-1);
 
@@ -664,7 +708,7 @@ function resultWorkItemDetails(workItemDetailstrans, results)
 		
 		if(path=="monitoringworkiteminfo.html")
 		{
-			workItemDetailstrans.executeSql('Select count(*) as count FROM mmpbenfi WHERE surveyworkitemmappingcode=? AND surveycode=?', [results.rows.item(0).surveyworkitemmappingcode,results.rows.item(0).surveycode], function(mmpbenfitrans, resul){if(resul.rows.item(0).count>0){$("#downloadben").hide()}else{$("#downloadben").show()}}, errorCB);
+			workItemDetailstrans.executeSql('Select count(*) as count FROM mmpbenfi WHERE surveyworkitemmappingcode=? AND surveycode=?', [results.rows.item(0).surveyworkitemmappingcode,results.rows.item(0).surveycode], function(mmpbenfitrans, resul){ if(resul.rows.item(0).count>0){ downloadstatus=resul.rows.item(0).count;}}, errorCB);
 			if(typeof localStorage.surveybenfdate=="undefined" || localStorage.surveybenfdate=="")
 			{
 				surveybenfdate=(new Date()).toISOString().slice(0,10);
@@ -688,7 +732,14 @@ function resultWorkItemDetails(workItemDetailstrans, results)
 									$("#totalinprogresscount").html(statusresult.rows.item(0).saved);
 									//$("#totalsubmitedcount").html(statusresult.rows.);
 									$("#totalsyncedcount").html(statusresult.rows.item(0).synced);
-									if($('#downloadben').css('display') == 'none'){if(statusresult.rows.item(0).saved>0){$("#workitemeditben").attr("disabled", false);}else{$("#workitemeditben").attr("disabled", true);}}
+									 if(downloadstatus>0)
+									 {
+										if(statusresult.rows.item(0).saved>0){
+											$("#workitemeditben").attr("disabled", false);
+										}else{
+											$("#workitemeditben").attr("disabled", true);
+										}
+									}
 								}else
 								{
 									$("#totaltargetcount").html(0);
@@ -709,7 +760,7 @@ function resultWorkItemDetails(workItemDetailstrans, results)
 		}	
 		else if(path=="baselineworkiteminfo.html")
 		{
-			workItemDetailstrans.executeSql('SELECT COUNT(status) AS count FROM mmpbenfi WHERE surveyworkitemmappingcode=? AND surveycode=?', [results.rows.item(0).surveyworkitemmappingcode, results.rows.item(0).surveycode], function(mmpbenfitrans, resul){if(resul.rows.item(0).count>0){$("#downloadben").hide()}else{$("#downloadben").show()}}, errorCB);
+			workItemDetailstrans.executeSql('SELECT COUNT(status) AS count FROM mmpbenfi WHERE surveyworkitemmappingcode=? AND surveycode=?', [results.rows.item(0).surveyworkitemmappingcode, results.rows.item(0).surveycode], function(mmpbenfitrans, resul){if(resul.rows.item(0).count>0){downloadstatus=resul.rows.item(0).count;}}, errorCB);
 			workItemDetailstrans.executeSql('SELECT COUNT(resondantcode) AS target, (SELECT COUNT(resondantcode) FROM mmpbenfi WHERE status="0"  AND surveycode=? AND surveyworkitemmappingcode=? ) AS open, (SELECT COUNT(resondantcode) FROM mmpbenfi WHERE status="1"  AND surveycode=? AND surveyworkitemmappingcode=? AND empid=? ) AS inprogress, (SELECT COUNT(resondantcode) FROM mmpbenfi WHERE status="2"  AND surveycode=? AND surveyworkitemmappingcode=? AND empid=? ) AS submitted, (SELECT COUNT(resondantcode) FROM mmpbenfi WHERE status="3"  AND surveycode=? AND surveyworkitemmappingcode=? AND empid=? ) AS synced FROM mmpbenfi WHERE  surveycode=? AND surveyworkitemmappingcode=?', [results.rows.item(0).surveycode, results.rows.item(0).surveyworkitemmappingcode, results.rows.item(0).surveycode, results.rows.item(0).surveyworkitemmappingcode, empidlocal, results.rows.item(0).surveycode, results.rows.item(0).surveyworkitemmappingcode, empidlocal, results.rows.item(0).surveycode, results.rows.item(0).surveyworkitemmappingcode, empidlocal, results.rows.item(0).surveycode, results.rows.item(0).surveyworkitemmappingcode], surveyStataticsDetails, errorCB);
 			
 			workItemDetailstrans.executeSql('SELECT * FROM workitemsserverstatus WHERE workitemmmpcode=?', [results.rows.item(0).workitemcode], function(workitemsserverstatustrans, statusresult)
@@ -721,7 +772,17 @@ function resultWorkItemDetails(workItemDetailstrans, results)
 					$("#totalinprogresscount").html(statusresult.rows.item(0).saved);
 					//$("#totalsubmitedcount").html(statusresult.rows.);
 					$("#totalsyncedcount").html(statusresult.rows.item(0).synced);
-					if($('#downloadben').css('display') == 'none'){if(statusresult.rows.item(0).saved>0){$("#workitemeditben").attr("disabled", false);}else{$("#workitemeditben").attr("disabled", true);}}else{$("#workitemeditben").attr("disabled", true);}
+					if(downloadstatus>0)
+					{
+						if(statusresult.rows.item(0).saved>0)
+						{
+							$("#workitemeditben").attr("disabled", false);
+						}
+						else
+						{
+							$("#workitemeditben").attr("disabled", true);
+						}
+					}else{$("#workitemeditben").attr("disabled", true);}
 				}else
 				{
 					$("#totaltargetcount").html(0);
@@ -766,9 +827,9 @@ function surveyStataticsDetails(surveyStataticsDetailstrans, results)
 	{$("#totaltargetcount").html(results.rows.item(0).mapped);}
 	$("#totalsubmitedcount").html(results.rows.item(0).submitted)
 
-	if(results.rows.item(0).target>0){$("#downloadben").attr("disabled", true);}else{$("#downloadben").attr("disabled", false);}
+	// if(results.rows.item(0).target>0){$("#downloadben").attr("disabled", true);}else{$("#downloadben").attr("disabled", false);}
 	if(results.rows.item(0).open>0){$("#workitemsurveyben").attr("disabled", false);}else{$("#workitemsurveyben").attr("disabled", true);}
-	if($("#downloadben").prop('disabled')){if(results.rows.item(0).inprogress>0){$("#workitemeditben").attr("disabled", false);}else{$("#workitemeditben").attr("disabled", true);}}else{$("#workitemeditben").attr("disabled", true);}
+	if(results.rows.item(0).target>0){if(results.rows.item(0).inprogress>0){$("#workitemeditben").attr("disabled", false);}else{$("#workitemeditben").attr("disabled", true);}}else{$("#workitemeditben").attr("disabled", true);}
 	if(path="monitoringworkiteminfo.html"){
 		if(results.rows.item(0).target>0){$("#msaddbeneficiary").attr("disabled", false);}else{$("#msaddbeneficiary").attr("disabled", true);}
 	}
@@ -1033,7 +1094,7 @@ function sqlsaveSurveyResponse(saveSurveyResponsetrans)
 
 
 	 	if(path=="bleditsurveypage.html" || path=="blsurveypage.html")
-	 	{ saveSurveyResponsetrans.executeSql('UPDATE mmpbenfi SET status="'+surveyresponsesavetype+'", empid="'+empidlocal+'", empname="'+usernamelocal+'", updatedon="'+updatetime+'" WHERE surveyworkitemmappingcode ="'+surveyworkitemmappingcode+'" AND surveycode="'+survey+'" AND resondantcode="'+respondantcode+'"');
+	 	{ saveSurveyResponsetrans.executeSql('UPDATE mmpbenfimis SET status="'+surveyresponsesavetype+'", empid="'+empidlocal+'", empname="'+usernamelocal+'", updatedon="'+updatetime+'" WHERE surveyworkitemmappingcode ="'+surveyworkitemmappingcode+'" AND surveycode="'+survey+'" AND resondantcode="'+respondantcode+'"');
 		}else if(path=="editsurveypage.html" || path=="surveypage.html")
 		{ saveSurveyResponsetrans.executeSql('UPDATE mmp_ms_benf SET status="'+surveyresponsesavetype+'", empid="'+empidlocal+'", empname="'+usernamelocal+'" WHERE Datetime(fromdate) <= Datetime("'+surveydate+'") AND Datetime(todate) > Datetime("'+surveydate+'") AND surveyworkitemmappingcode ="'+surveyworkitemmappingcode+'" AND surveycode="'+survey+'" AND respondantcode="'+respondantcode+'"');}
 		
@@ -1267,7 +1328,7 @@ function sqlsaveEditSurveyResponse(sqlsaveEditSurveyResponsetrans)
 		var updatetime=(new Date()).toISOString();
 
 		if(path=="bleditsurveypage.html" || path=="blsurveypage.html")
-	 	{ sqlsaveEditSurveyResponsetrans.executeSql('UPDATE mmpbenfi SET status="'+surveyresponsesavetype+'", empid="'+empidlocal+'", empname="'+usernamelocal+'", updatedon="'+updatetime+'" WHERE surveyworkitemmappingcode ="'+surveyworkitemmappingcode+'" AND surveycode="'+survey+'" AND resondantcode="'+respondantcode+'"');
+	 	{ sqlsaveEditSurveyResponsetrans.executeSql('UPDATE mmpbenfimis SET status="'+surveyresponsesavetype+'", empid="'+empidlocal+'", empname="'+usernamelocal+'", updatedon="'+updatetime+'" WHERE surveyworkitemmappingcode ="'+surveyworkitemmappingcode+'" AND surveycode="'+survey+'" AND resondantcode="'+respondantcode+'"');
 		}else if(path=="editsurveypage.html" || path=="surveypage.html")
 		{sqlsaveEditSurveyResponsetrans.executeSql('UPDATE mmp_ms_benf SET status="'+surveyresponsesavetype+'", empid="'+empidlocal+'", empname="'+usernamelocal+'" WHERE Datetime(fromdate) <= Datetime("'+surveydate+'") AND Datetime(todate) > Datetime("'+surveydate+'") AND surveyworkitemmappingcode ="'+surveyworkitemmappingcode+'" AND surveycode="'+survey+'" AND respondantcode="'+respondantcode+'"');}
 		
@@ -1475,7 +1536,7 @@ function resultBLBeneficiaryList(resultBLBeneficiaryListtran, results)
 				else{
 					
 				}
-				if(results.rows.item(blitemsloop).resondantcode!="" && results.rows.item(blitemsloop).geom!="undefined" && results.rows.item(blitemsloop).geom!="" && results.rows.item(blitemsloop).geom!="null")
+				if(results.rows.item(blitemsloop).resondantcode!="" && results.rows.item(blitemsloop).geom!="undefined" && results.rows.item(blitemsloop).geom!="" && results.rows.item(blitemsloop).geom!="null" && results.rows.item(blitemsloop).geom!=null)
 				{
 
 					format = new ol.format.WKT();
@@ -1751,7 +1812,7 @@ function resultmsselectBeneficiarylist(resultmsselectBeneficiarylisttrans, resul
 		for(blitemsloop=0; blitemsloop<results.rows.length; blitemsloop++)
 		{
 			blitems.push(results.rows.item(blitemsloop));
-			if(results.rows.item(blitemsloop).resondantcode!="" && results.rows.item(blitemsloop).geom!="undefined")
+			if(results.rows.item(blitemsloop).resondantcode!="")
 			{
 				tempaddbenfarray.push(results.rows.item(blitemsloop));
 
@@ -1759,13 +1820,14 @@ function resultmsselectBeneficiarylist(resultmsselectBeneficiarylisttrans, resul
 				
 				if(uniquebuildingtype.indexOf(results.rows.item(blitemsloop).buildingtype) === -1){
 			        uniquebuildingtype.push(results.rows.item(blitemsloop).buildingtype); 
-			        document.getElementById("buildingtype").options[document.getElementById("buildingtype").length]=new Option(results.rows.item(blitemsloop).buildingtype,results.rows.item(blitemsloop).buildingtype);      
+			        document.getElementById("buildingtype").options[document.getElementById("buildingtype").length]=new Option(results.rows.item(blitemsloop).buildingtype,results.rows.item(blitemsloop).buildingtype);
 			    } 
-
+			    // alert(results.rows.item(blitemsloop).geom);
 				format = new ol.format.WKT();
 				var featureGeom="";
-				if(typeof results.rows.item(blitemsloop).geom!="undefined" && results.rows.item(blitemsloop).geom!="" && results.rows.item(blitemsloop).geom!="null")
+				if(typeof results.rows.item(blitemsloop).geom!="undefined" && results.rows.item(blitemsloop).geom!="" && results.rows.item(blitemsloop).geom!="null" && results.rows.item(blitemsloop).geom!=null)
 				{
+					
 					featureGeom = format.readFeature(results.rows.item(blitemsloop).geom,{ dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857'});
 					if(results.rows.item(blitemsloop).status==0 || results.rows.item(blitemsloop).status==4)
 					{featureGeom.setStyle(todo);}
@@ -1782,12 +1844,12 @@ function resultmsselectBeneficiarylist(resultmsselectBeneficiarylisttrans, resul
 			}
 		}
 
-		if(benfsource.getFeatures().length>0)
-		{
+		// if(benfsource.getFeatures().length>0)
+		// {
 			$("#datapool").html(htmlcontent);
 			var extent = benfsource.getExtent();
 			setTimeout(function (){map.getView().fit(extent, map.getSize())},1000);
-		}
+		// }
 	}
 	else{
 		$("#datapool").html("<hr style='background-color:white;'><h4 align='center' style='width:100%;'>No Records Found</h4>");
@@ -1849,7 +1911,7 @@ function sqlSaveSelectedBenfUpdate(sqlSaveSelectedBenfUpdatetrans, results)
 	{
 		for(benlen=0; benlen<selectedbeneficiaryarray.length; benlen++)
 		{
-			sqlSaveSelectedBenfUpdatetrans.executeSql('UPDATE mmpbenfi SET status="4", empid=?, updatedon=? WHERE surveyworkitemmappingcode=? AND surveycode=? AND resondantcode=?', [empidlocal, updatetime, surveyworkitemmappingcode, survey, selectedbeneficiaryarray[benlen]]);
+			sqlSaveSelectedBenfUpdatetrans.executeSql('UPDATE mmpbenfimis SET status="4", empid=?, updatedon=? WHERE surveyworkitemmappingcode=? AND surveycode=? AND resondantcode=?', [empidlocal, updatetime, surveyworkitemmappingcode, survey, selectedbeneficiaryarray[benlen]]);
 			for(msdatesloop=0; msdatesloop<msdateslen; msdatesloop++)
 			{
 				sqlSaveSelectedBenfUpdatetrans.executeSql('INSERT INTO mmp_ms_benf (surveyworkitemmappingcode, surveycode, respondantcode, fromdate, todate, status, empid) VALUES(?,?,?,?,?,?,?)', [surveyworkitemmappingcode, survey, selectedbeneficiaryarray[benlen], results.rows.item(msdatesloop).fromsurveydate, results.rows.item(msdatesloop).tosurveydate, "0", empidlocal]);
@@ -2052,20 +2114,23 @@ function resultMonitoringselectedBenef(resultMonitoringselectedBeneftrans, resul
 				}
 
 				format = new ol.format.WKT();
-				var featureGeom="";
-				featureGeom = format.readFeature(results.rows.item(blitemsloop).geom,{ dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857'});
-				//alert(blitems[blitemsloop].status);
-				if(results.rows.item(blitemsloop).status==0 || results.rows.item(blitemsloop).status==4)
-				{featureGeom.setStyle(todo);}
-				else if(results.rows.item(blitemsloop).status==1)
-				{featureGeom.setStyle(inprogress);}
-				else if(results.rows.item(blitemsloop).status==2)
-				{featureGeom.setStyle(submitted);}
-				else if(results.rows.item(blitemsloop).status==3)
-				{featureGeom.setStyle(synced);}
-				
-				featureGeom.setProperties({'respondentcode':results.rows.item(blitemsloop).resondantcode, 'index':blitemsloop,  'geom':results.rows.item(blitemsloop).geom});
-				benfsource.addFeature(featureGeom);
+				if(results.rows.item(blitemsloop).geom!="" && results.rows.item(blitemsloop).geom!="undefined" && results.rows.item(blitemsloop).geom!="null" && results.rows.item(blitemsloop).geom!=null)
+				{	
+					var featureGeom="";
+					featureGeom = format.readFeature(results.rows.item(blitemsloop).geom,{ dataProjection: 'EPSG:4326', featureProjection: 'EPSG:3857'});
+					//alert(blitems[blitemsloop].status);
+					if(results.rows.item(blitemsloop).status==0 || results.rows.item(blitemsloop).status==4)
+					{featureGeom.setStyle(todo);}
+					else if(results.rows.item(blitemsloop).status==1)
+					{featureGeom.setStyle(inprogress);}
+					else if(results.rows.item(blitemsloop).status==2)
+					{featureGeom.setStyle(submitted);}
+					else if(results.rows.item(blitemsloop).status==3)
+					{featureGeom.setStyle(synced);}
+					
+					featureGeom.setProperties({'respondentcode':results.rows.item(blitemsloop).resondantcode, 'index':blitemsloop,  'geom':results.rows.item(blitemsloop).geom});
+					benfsource.addFeature(featureGeom);
+				}
 			}
 		} 
 		setTimeout(function(){ 
@@ -2657,9 +2722,10 @@ function sqlSearchBenf(sqlSearchBenftrans)
 
 
 // ============ *** Download village data Begin*** ========
-
+benfdownlocation={};
 function loadlocations()
 {
+	benfdownlocation={};
 	setTimeout(function(){
 		rootdetection.isDeviceRooted(function (result) {
 			if(result==0)
@@ -2676,8 +2742,12 @@ function loadlocations()
 function sqlloadlocations(sqlloadlocationstrans)
 {
 	workitemcode=CryptoJS.AES.decrypt(localStorage.workitem, localStorage.employeeid).toString(CryptoJS.enc.Utf8).slice(1,-1);
-	sqlloadlocationstrans.executeSql("SELECT workitemscode, locationcode, locationname, locationtype FROM locations WHERE workitemscode=?",[workitemcode], loadbendataserverdata)
+	sqlloadlocationstrans.executeSql("SELECT workitemscode, locationcode, locationname, locationtype FROM locations WHERE workitemscode=?",[workitemcode], function loadbendataserverdata(tranx, locationsres)
+	{
+		for(locationloop=0; locationloop<locationsres.rows.length; locationloop++){benfdownlocation[locationloop]=locationsres.rows.item(locationloop); }
+	})
 }
+
 
 function insertorupdatebendata()
 {
@@ -2687,7 +2757,8 @@ function insertorupdatebendata()
 			{
 				// var db = window.openDatabase("Database", "1.0", "samuday360android", 2000000);
 				var db =window.sqlitePlugin.openDatabase({ name: 'samuday360android.db', location: 'default', androidDatabaseProvider: 'system' });
-				db.transaction(sqlinsertorupdatebendata, errorCB,monitoringbensownloadsuccess);
+				//db.transaction(sqlinsertorupdatebendata, errorCB,monitoringbensownloadsuccess);
+				db.transaction(sqlinsertorupdatebendata, errorCB, function(trans){if(gislastdate=="" || gislastdate==null){loadgisdata();}else{monitoringbensownloadsuccess()}});
 			}else{navigator.notification.alert("Device doesn't Support", function(){}, 'Samuday 360','Done');}
 		}, function (error) {navigator.notification.alert("Device doesn't Support", function(){}, 'Samuday 360','Done');});
 	}, 60);
@@ -2698,50 +2769,66 @@ function sqlinsertorupdatebendata(sqlinsertorupdatebendatatrans)
 	var surveyworkitemmappingcode=CryptoJS.AES.decrypt(localStorage.surveyworkitemmappingcode, localStorage.employeeid).toString(CryptoJS.enc.Utf8).slice(1,-1);
 	workitemcode=CryptoJS.AES.decrypt(localStorage.workitem, localStorage.employeeid).toString(CryptoJS.enc.Utf8).slice(1,-1);
 	survey=CryptoJS.AES.decrypt(localStorage.survey, localStorage.employeeid).toString(CryptoJS.enc.Utf8).slice(1,-1);
+	// alert(JSON.stringify(loadbendata));
 	var benedata=loadbendata.survey_bene;
 	buildinggeomsetlist=loadbendata.buildinggeom[0];
 	var path = window.location.pathname.split("/").pop();
+	
+	// alert(benedata.length);
 
 	if(path=="baselineworkiteminfo.html")
 	{
 		for(survey_beneloop=0; survey_beneloop<benedata.length; survey_beneloop++)
 		{
 			survey_beneset=benedata[survey_beneloop];
-			sqlinsertorupdatebendatatrans.executeSql('INSERT INTO mmpbenfi (surveyworkitemmappingcode, surveycode,resondantcode,respondantname,gender,hohname,relationwithhoh,occupation,dateofbirth,block,grampanchayat,village, buildingcode, housecode,  buildingtype, geom, status) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [surveyworkitemmappingcode, survey, survey_beneset.resondantcode, survey_beneset.respondantname, survey_beneset.gender, survey_beneset.hohname, survey_beneset.relationwithhoh, survey_beneset.occupation, survey_beneset.dateofbirth, survey_beneset.blockname,survey_beneset.gpname, survey_beneset.village, survey_beneset.buildingcode,survey_beneset.housecode, survey_beneset.buildingtype, buildinggeomsetlist[survey_beneset.buildingcode],  "0"]);
+			sqlinsertorupdatebendatatrans.executeSql('INSERT INTO mmpbenfimis (surveyworkitemmappingcode, surveycode,resondantcode,respondantname,gender,hohname,relationwithhoh,occupation,dateofbirth,block,grampanchayat,village, buildingcode, housecode,  buildingtype, status) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [surveyworkitemmappingcode, survey, survey_beneset.resondantcode, survey_beneset.respondantname, survey_beneset.gender, survey_beneset.hohname, survey_beneset.relationwithhoh, survey_beneset.occupation, survey_beneset.dateofbirth, survey_beneset.blockname,survey_beneset.gpname, survey_beneset.village, survey_beneset.buildingcode,survey_beneset.housecode, survey_beneset.buildingtype,  "0"]);
 		}
+
+		newben=loadbendata.newsurvey_bene;
+		newbenlen=newbenlen;
+		for(newbenloop=0; newbenloop<newbenlen; newbenloop++)
+		{
+			newbenunit=newben[newbenloop]
+			sqlinsertorupdatebendatatrans.executeSql('INSERT INTO mmpbenfimis (surveyworkitemmappingcode, surveycode,resondantcode,respondantname,gender,hohname,relationwithhoh,occupation,dateofbirth,block,grampanchayat,village, buildingcode, housecode,  buildingtype, status) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [surveyworkitemmappingcode, survey, newbenunit.resondantcode, newbenunit.respondantname, newbenunit.gender, newbenunit.hohname, newbenunit.relationwithhoh, newbenunit.occupation, newbenunit.dateofbirth, newbenunit.blockname, newbenunit.gpname, newbenunit.village, newbenunit.buildingcode, newbenunit.housecode, newbenunit.buildingtype,  "0"]);
+		}
+
 	}else if(path=="monitoringworkiteminfo.html"){
 		var monitoringsurveyfreqlen=monitoringsurveyfreq.length;
 		var updatetime=(new Date()).toISOString();
-
+		// alert("benedatalen ---------------   "+benedata.length);
 		for(benlen=0; benlen<benedata.length; benlen++)
 		{
 			survey_beneset=benedata[benlen];
-			sqlinsertorupdatebendatatrans.executeSql('INSERT INTO mmpbenfi (surveyworkitemmappingcode, surveycode,resondantcode,respondantname,gender,hohname,relationwithhoh,occupation,dateofbirth,block,grampanchayat,village, buildingcode, housecode,  buildingtype, geom, status) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [surveyworkitemmappingcode, survey, survey_beneset.resondantcode, survey_beneset.respondantname, survey_beneset.gender, survey_beneset.hohname, survey_beneset.relationwithhoh, survey_beneset.occupation, survey_beneset.dateofbirth, survey_beneset.blockname,survey_beneset.gpname, survey_beneset.village,survey_beneset.buildingcode,survey_beneset.housecode, survey_beneset.buildingtype, buildinggeomsetlist[survey_beneset.buildingcode],  "0"]);
+			sqlinsertorupdatebendatatrans.executeSql('INSERT INTO mmpbenfimis (surveyworkitemmappingcode, surveycode, resondantcode, respondantname, gender, hohname, relationwithhoh, occupation, dateofbirth, block, grampanchayat, village, buildingcode, housecode,  buildingtype, status) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [surveyworkitemmappingcode, survey, survey_beneset.resondantcode, survey_beneset.respondantname, survey_beneset.gender, survey_beneset.hohname, survey_beneset.relationwithhoh, survey_beneset.occupation, survey_beneset.dateofbirth, survey_beneset.blockname,survey_beneset.gpname, survey_beneset.village,survey_beneset.buildingcode,survey_beneset.housecode, survey_beneset.buildingtype, "0"]);
 						
 		}
-	}
 
-	var loadbendataroadarray_villlen=loadbendata.roadarray_vill.length
-	for(villroadloop=0; villroadloop<loadbendataroadarray_villlen; villroadloop++)
-	{
-		villroadset=loadbendata.roadarray_vill[villroadloop]
-		sqlinsertorupdatebendatatrans.executeSql('INSERT INTO villageroads(roadcode, geom) VALUES (?,?)', [villroadset.road_code, villroadset.st_astext]);
-	}
-
-	var villboundrieslen=loadbendata.roadarray_villBOUNDRIES.length;
-	for(villboundriesloop=0; villboundriesloop<villboundrieslen; villboundriesloop++)
-	{
-		villboundryset=loadbendata.roadarray_villBOUNDRIES[villboundriesloop]
-		if(typeof villboundryset!="undefined")
+		var newben=loadbendata.newsurvey_bene;
+		var newbenlen=newbenlen;
+		// alert("newbenlen ---------------   "+newbenlen);
+		for(newbenloop=0; newbenloop<newbenlen; newbenloop++)
 		{
-			sqlinsertorupdatebendatatrans.executeSql('INSERT INTO villageboundries(workitemscode, roadcode, villagename, geom) VALUES (?,?,?,?)', [workitemcode, villboundryset.road_code, villboundryset.villagename, villboundryset.st_astext]);
+			newbenunit=newben[newbenloop]
+			sqlinsertorupdatebendatatrans.executeSql('INSERT INTO mmpbenfimis (surveyworkitemmappingcode, surveycode, resondantcode, respondantname, gender, hohname, relationwithhoh, occupation, dateofbirth, block, grampanchayat, village, buildingcode, housecode,  buildingtype, status) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [surveyworkitemmappingcode, survey, newbenunit.resondantcode, newbenunit.respondantname, newbenunit.gender, newbenunit.hohname, newbenunit.relationwithhoh, newbenunit.occupation, newbenunit.dateofbirth, newbenunit.blockname, newbenunit.gpname, newbenunit.village, newbenunit.buildingcode, newbenunit.housecode, newbenunit.buildingtype, "0"]);
 		}
 	}
-	var landmarklen=loadbendata.buildingtypegeom.length;
-	for(landmarkloop=0; landmarkloop<landmarklen; landmarkloop++)
+
+	var modifiedsurvey_bene=loadbendata.modifiedsurvey_bene;
+	var modifiedsurvey_benelen= modifiedsurvey_bene.length;
+	// alert("fghfghfg------ "+modifiedsurvey_benelen);
+	for(modifiedsurvey_beneloop=0; modifiedsurvey_beneloop<modifiedsurvey_benelen; modifiedsurvey_beneloop++)
 	{
-		landmarkset=loadbendata.buildingtypegeom[landmarkloop]
-		sqlinsertorupdatebendatatrans.executeSql('INSERT INTO landmarks(workitemscode, type, geom) VALUES (?,?,?)', [workitemcode, landmarkset.type, landmarkset.geom]);
+		modifiedsurvey_beneunit=loadbendata.modifiedsurvey_bene;
+		sqlinsertorupdatebendatatrans.executeSql('Update mmpbenfimis SET respondantname=?, gender=?, hohname=?, relationwithhoh=?, occupation=?, dateofbirth=?, block=?, grampanchayat=?, village=?, buildingcode=?, housecode=?,  buildingtype=? WHERE resondantcode=? AND surveyworkitemmappingcode=?', [modifiedsurvey_beneunit.respondantname, modifiedsurvey_beneunit.gender, modifiedsurvey_beneunit.hohname, modifiedsurvey_beneunit.relationwithhoh, modifiedsurvey_beneunit.occupation, modifiedsurvey_beneunit.dateofbirth, modifiedsurvey_beneunit.blockname, modifiedsurvey_beneunit.gpname, modifiedsurvey_beneunit.village, modifiedsurvey_beneunit.buildingcode, modifiedsurvey_beneunit.housecode, modifiedsurvey_beneunit.buildingtype, modifiedsurvey_beneunit.resondantcode, surveyworkitemmappingcode]);
+	}
+	
+
+	timestamp=new Date().toISOString();
+	// lastsynced=loadbendata.lastsynced;
+	if(lastsynced!="")
+	{
+			sqlinsertorupdatebendatatrans.executeSql('DELETE FROM syncdates WHERE surveyworkitemmapping=? AND service=?', [surveyworkitemmappingcode, "benficiarydownloadsavemis"]);
+			sqlinsertorupdatebendatatrans.executeSql('INSERT INTO syncdates (service, surveyworkitemmapping, servertime, localtime, remark) VALUES (?,?,?,?,?)', ["benficiarydownloadsavemis", surveyworkitemmappingcode, lastsynced, timestamp, ""]);
 	}
 }
 
@@ -2754,26 +2841,23 @@ function pageloadedsuccessbenf()
 
 function monitoringbensownloadsuccess()
 {
-	var path = window.location.pathname.split("/").pop();
-	SpinnerDialog.hide();
-	if(path=="monitoringworkiteminfo.html")
-	{ 
-		SpinnerDialog.hide();
-		//userSync();
-		window.location.reload();
-		//===== Online ======
-		//downloadstatusdata();
-		//===== Online ======
-	}
-	else if(path=="baselineworkiteminfo.html"){
-		SpinnerDialog.hide();
-		//userSync();
-		window.location.reload();
-	}
+
+	navigator.notification.alert("MIS and GIS data loaded Successfully", function()
+	{
+		var path = window.location.pathname.split("/").pop();
+		if(path=="monitoringworkiteminfo.html")
+		{ 
+			SpinnerDialog.hide();
+			window.location.reload();
+		}
+		else if(path=="baselineworkiteminfo.html"){
+			SpinnerDialog.hide();
+			window.location.reload();
+		}
+	}, 'Samuday 360','Done');
 	
 }
 // ============ *** Download village data END*** ========
-
 
 
 
@@ -2835,7 +2919,7 @@ function loadlocalresponcessql(loadlocalresponcessqltrans)
 	
 	selectedbenfresponse={};
 	// ======= Offline (Select upload selected ben) ====
-	loadlocalresponcessqltrans.executeSql("SELECT surveyworkitemmappingcode, surveycode, resondantcode, empid FROM mmpbenfi  WHERE status='4'",[], function(mmpbenfitrans, selectedbenfresult){
+	loadlocalresponcessqltrans.executeSql("SELECT * FROM mmpbenfi  WHERE status='4'",[], function(mmpbenfitrans, selectedbenfresult){
 		for(selectedbenloop=0; selectedbenloop<selectedbenfresult.rows.length; selectedbenloop++){ selectedbenfresponse[selectedbenloop]= selectedbenfresult.rows.item(selectedbenloop) }
 	},errorCB);
 	// ======= Offline (Select upload selected ben) ====
@@ -2874,7 +2958,7 @@ function removeselectedmonitbenesql(removeselectedmonitbenesqltrans)
 		{
 			if(selectedbenlist[benfloop].mappingcode==woeitemdatesarray.items[itemsloop].swmp)
 			{ 
-				removeselectedmonitbenesqltrans.executeSql('UPDATE mmpbenfi SET status="0", empid=?, updatedon=? WHERE surveyworkitemmappingcode=?  AND resondantcode=?', [updatetime, selectedbenlist[benfloop].empid, selectedbenlist[benfloop].mappingcode, selectedbenlist[benfloop].respondentcode]);
+				removeselectedmonitbenesqltrans.executeSql('UPDATE mmpbenfimis SET status="0", empid=?, updatedon=? WHERE surveyworkitemmappingcode=?  AND resondantcode=?', [updatetime, selectedbenlist[benfloop].empid, selectedbenlist[benfloop].mappingcode, selectedbenlist[benfloop].respondentcode]);
 				for(datesloop=0; datesloop<woeitemdatesarray.items[itemsloop].dates.length; datesloop++)
 				{
 					removeselectedmonitbenesqltrans.executeSql('INSERT INTO mmp_ms_benf (surveyworkitemmappingcode, surveycode, respondantcode, fromdate, todate, status, empid) VALUES (?, ?, ?, ?, ?, ?, ?)',  [selectedbenlist[benfloop].mappingcode, woeitemdatesarray.items[itemsloop].dates[datesloop].surveycode, selectedbenlist[benfloop].respondentcode, woeitemdatesarray.items[itemsloop].dates[datesloop].fromsurveydate, woeitemdatesarray.items[itemsloop].dates[datesloop].tosurveydate, "0", woeitemdatesarray.items[itemsloop].dates[datesloop].empid]);
@@ -2882,7 +2966,12 @@ function removeselectedmonitbenesql(removeselectedmonitbenesqltrans)
 			}
 		}
 	}
-
+	
+	timestamp=new Date().toISOString();
+	if(lastsynced!="")
+	{
+		removeselectedmonitbenesqltrans.executeSql('UPDATE syncdates SET servertime=?, localtime=? WHERE service=?', [lastsynced, timestamp, "sdnew"]);
+	}
 }
 
 // ============ *** Upload Parent and Child Responces End*** ========
@@ -2914,7 +3003,7 @@ function downloadlocalresponcessql(downloadlocalresponcessqltrans)
 	var workitems=[];
 	downloadresponsedata=[];
 	downloadlocalresponcessqltrans.executeSql('UPDATE mmp_ms_benf  SET status="3" WHERE status="2" ');
-	downloadlocalresponcessqltrans.executeSql('UPDATE mmpbenfi SET status="3" WHERE status="2" ');
+	downloadlocalresponcessqltrans.executeSql('UPDATE mmpbenfimis SET status="3" WHERE status="2" ');
 	
 	downloadlocalresponcessqltrans.executeSql("SELECT surveyworkitemmappingcode as surveyworkitemmappingcode, fromsurveydate as surveydate FROM monitoringsurveydates",[], function(monitoringsurveydatestrans, surveydatesresult){
 		for(loop=0; loop<surveydatesresult.rows.length; loop++){monitoringsurveydate.push(surveydatesresult.rows.item(loop))}
@@ -2972,6 +3061,7 @@ function updateserverresponcessql(updateserverresponcessqltrans)
 	
 	updateserverresponcessqltrans.executeSql('DELETE FROM surveyparentresponse');
 	updateserverresponcessqltrans.executeSql('DELETE FROM surveychildresponse');
+	timestamp=new Date().toISOString();
 
 	var resultlength=updateserverresponces.length;
 	for(loop=0; loop<resultlength; loop++)
@@ -2996,7 +3086,7 @@ function updateserverresponcessql(updateserverresponcessqltrans)
 					
 					var temp_ben_status=bene_status[bene_status_loop].status;
 					if(temp_ben_status=="2") {temp_ben_status="3"}
-					updateserverresponcessqltrans.executeSql('UPDATE mmpbenfi SET status=?, empid=?, empname=? WHERE surveyworkitemmappingcode=? AND resondantcode=?',[temp_ben_status, bene_status[bene_status_loop].surveydoneby, bene_status[bene_status_loop].empname, bene_status[bene_status_loop].surveyworkitemmappingcode, bene_status[bene_status_loop].respondantcode])
+					updateserverresponcessqltrans.executeSql('UPDATE mmpbenfimis SET status=?, empid=?, empname=? WHERE surveyworkitemmappingcode=? AND resondantcode=?',[temp_ben_status, bene_status[bene_status_loop].surveydoneby, bene_status[bene_status_loop].empname, bene_status[bene_status_loop].surveyworkitemmappingcode, bene_status[bene_status_loop].respondantcode])
 				}
 			}
 			else if(surveytype=='MS')
@@ -3011,7 +3101,7 @@ function updateserverresponcessql(updateserverresponcessqltrans)
 					var temp_mmpbenfi_status=bene_status[bene_status_loop].status;
 					if(temp_ben_status=="2"){temp_ben_status="3"; temp_mmpbenfi_status="3"}
 					else if(temp_ben_status=="0"){temp_mmpbenfi_status="4"}
-					updateserverresponcessqltrans.executeSql('UPDATE mmpbenfi SET status=?, empid=?, empname=? WHERE surveyworkitemmappingcode=? AND resondantcode=?', [temp_mmpbenfi_status, bene_status[bene_status_loop].surveydoneby, bene_status[bene_status_loop].empname, bene_status[bene_status_loop].surveyworkitemmappingcode, bene_status[bene_status_loop].respondantcode])
+					updateserverresponcessqltrans.executeSql('UPDATE mmpbenfimis SET status=?, empid=?, empname=? WHERE surveyworkitemmappingcode=? AND resondantcode=?', [temp_mmpbenfi_status, bene_status[bene_status_loop].surveydoneby, bene_status[bene_status_loop].empname, bene_status[bene_status_loop].surveyworkitemmappingcode, bene_status[bene_status_loop].respondantcode])
 					updateserverresponcessqltrans.executeSql('UPDATE mmp_ms_benf SET status=?, empid=?, empname=? WHERE surveyworkitemmappingcode=? AND respondantcode=? AND fromdate=?', [temp_ben_status, bene_status[bene_status_loop].surveydoneby, bene_status[bene_status_loop].empname, bene_status[bene_status_loop].surveyworkitemmappingcode, bene_status[bene_status_loop].respondantcode, bene_status[bene_status_loop].surveydate])
 					
 				}
@@ -3055,6 +3145,10 @@ function updateserverresponcessql(updateserverresponcessqltrans)
 		}
 	}
 
+	if(lastsynced!="")
+	{
+		updateserverresponcessqltrans.executeSql('UPDATE syncdates SET servertime=?, localtime=? WHERE service=?', [lastsynced, timestamp, "updatebeneficiarynew"]);
+	}
 }
 
 // ============ *** Update Server Parent and Child Responces END *** ========
@@ -3096,10 +3190,168 @@ function monitoringbenselectedbensql(monitoringbenselectedbensqltrans)
 				for(bene_status_loop=0; bene_status_loop<loadstatusbendata.length; bene_status_loop++)
 				{
 					monitoringbenselectedbensqltrans.executeSql('INSERT INTO mmp_ms_benf (surveyworkitemmappingcode, surveycode, respondantcode, fromdate, todate, status, empid) VALUES (?, ?, ?, ?, ?, ?, ?)', [loadstatusbendata[bene_status_loop].surveyworkitemmappingcode, survey, loadstatusbendata[bene_status_loop].respondantcode, dates.rows.item(dateloop).surveydate, dates.rows.item(dateloop).enddate, "0", empidlocal]);
-					monitoringbenselectedbensqltrans.executeSql('UPDATE mmpbenfi SET status="4", empid=?, updatedon=? WHERE surveyworkitemmappingcode=? AND surveycode=? AND resondantcode=?', [empidlocal, updatetime, loadstatusbendata[bene_status_loop].surveyworkitemmappingcode, survey, loadstatusbendata[bene_status_loop].respondantcode]);
+					monitoringbenselectedbensqltrans.executeSql('UPDATE mmpbenfimis SET status="4", empid=?, updatedon=? WHERE surveyworkitemmappingcode=? AND surveycode=? AND resondantcode=?', [empidlocal, updatetime, loadstatusbendata[bene_status_loop].surveyworkitemmappingcode, survey, loadstatusbendata[bene_status_loop].respondantcode]);
 				}
 			}
 
 		},errorCB);
 	}
 } 
+
+
+downlocation=[];
+
+function fetchdownloadlocations()
+{
+	downlocation=[];
+	setTimeout(function(){
+		rootdetection.isDeviceRooted(function (result) {
+			if(result==0)
+			{
+				// var db = window.openDatabase("Database", "1.0", "samuday360android", 2000000);
+				var db =window.sqlitePlugin.openDatabase({ name: 'samuday360android.db', location: 'default', androidDatabaseProvider: 'system' });
+				//db.transaction(sqlinsertorupdatebendata, errorCB,monitoringbensownloadsuccess);
+				db.transaction(fetchdownloadlocationssql, errorCB);
+			}else{navigator.notification.alert("Device doesn't Support", function(){}, 'Samuday 360','Done');}
+		}, function (error) {navigator.notification.alert("Device doesn't Support", function(){}, 'Samuday 360','Done');});
+	}, 60);
+}
+
+function fetchdownloadlocationssql(fetchlocations)
+{
+
+	var workitemcode=CryptoJS.AES.decrypt(localStorage.workitem, localStorage.employeeid).toString(CryptoJS.enc.Utf8).slice(1,-1);
+	fetchlocations.executeSql("SELECT locationcode, locationname, locationtype FROM locations WHERE workitemscode=?", [workitemcode], function(fetchlocationss, results){
+		for(loop=0; loop<results.rows.length; loop++){downlocation.push(results.rows.item(loop))}
+	});
+}
+
+function insertorupdategisbendata()
+{
+	setTimeout(function(){
+			rootdetection.isDeviceRooted(function (result) {
+			if(result==0)
+			{
+				// var db = window.openDatabase("Database", "1.0", "samuday360android", 2000000);
+				var db =window.sqlitePlugin.openDatabase({ name: 'samuday360android.db', location: 'default', androidDatabaseProvider: 'system' });
+				db.transaction(insertorupdategisbendatasql, errorCB, monitoringbensownloadsuccess);
+				
+			}else{navigator.notification.alert("Device doesn't Support", function(){}, 'Samuday 360','Done');}
+		}, function (error) {navigator.notification.alert("Device doesn't Support", function(){}, 'Samuday 360','Done');});
+	}, 60);	
+}
+
+function insertorupdategisbendatasql(gistx)
+{
+	var workitemcode=CryptoJS.AES.decrypt(localStorage.workitem, localStorage.employeeid).toString(CryptoJS.enc.Utf8).slice(1,-1);
+	var surveyworkitemmappingcode=CryptoJS.AES.decrypt(localStorage.surveyworkitemmappingcode, localStorage.employeeid).toString(CryptoJS.enc.Utf8).slice(1,-1);
+
+	var sh_roads_arr=loadbengisdata.sh_roads_arr;
+	var gp_roads_arr=loadbengisdata.sh_roads_arr;
+	var roadarray_vill=loadbengisdata.roadarray_vill;
+	var roadarray_villBOUNDRIES=loadbengisdata.roadarray_villBOUNDRIES;
+	var buildingtypegeom=loadbengisdata.buildingtypegeom;
+	var buildinggeom=loadbengisdata.buildinggeom;
+	// alert(loadbengisdata.buildinggeom);
+	// alert(JSON.stringify(loadbengisdata.buildinggeom[0]));
+
+	var sh_roads_arrlen=sh_roads_arr.length;
+	var gp_roads_arrlen=gp_roads_arr.length;
+	var loadbendataroadarray_villlen=roadarray_vill.length
+	var villboundrieslen=roadarray_villBOUNDRIES.length;
+	var landmarklen=loadbendata.buildingtypegeom.length;
+	var buildinggeomlen=buildinggeom.length;
+	// alert(buildinggeomlen);
+
+	if(sh_roads_arrlen>0)
+	{
+		for(sh_roadsloop=0; sh_roadsloop<sh_roads_arrlen; sh_roadsloop++)
+		{gistx.executeSql('INSERT INTO shroads(roadcode, geom) VALUES (?,?)',  [sh_roads_arr[sh_roadsloop].sh_code, sh_roads_arr[sh_roadsloop].st_astext]);}
+	}
+
+	if(gp_roads_arrlen>0)
+	{
+		for(gp_roadsloop=0; gp_roadsloop<gp_roads_arrlen; gp_roadsloop++)
+		{gistx.executeSql('INSERT INTO gproads(roadcode, geom) VALUES (?,?)', [gp_roads_arr[gp_roadsloop].gpr_code, gp_roads_arr[gp_roadsloop].st_astext]);}
+	}
+
+	if(loadbendataroadarray_villlen>0)
+	{
+		for(villroadloop=0; villroadloop<loadbendataroadarray_villlen; villroadloop++)
+		{
+			villroadset=roadarray_vill[villroadloop]
+			gistx.executeSql('INSERT INTO villageroads(roadcode, geom) VALUES (?,?)', [villroadset.road_code, villroadset.st_astext]);
+		}
+	}
+
+	if(villboundrieslen>0)
+	{
+		for(villboundriesloop=0; villboundriesloop<villboundrieslen; villboundriesloop++)
+		{
+			villboundryset=roadarray_villBOUNDRIES[villboundriesloop]
+			gistx.executeSql('INSERT INTO villageboundries(workitemscode, roadcode, villagename, geom) VALUES (?,?,?,?)', [workitemcode, villboundryset.road_code, villboundryset.villagename, villboundryset.st_astext]);
+		}
+	}
+
+	if(landmarklen>0)
+	{
+		for(landmarkloop=0; landmarkloop<landmarklen; landmarkloop++)
+		{
+			landmarkset=buildingtypegeom[landmarkloop]
+			gistx.executeSql('INSERT INTO landmarks(workitemscode, type, geom) VALUES (?,?,?)', [workitemcode, landmarkset.type, landmarkset.geom]);
+		}
+	}
+
+	if(buildinggeomlen>0)
+	{
+		for(buildinggeomloop=0; buildinggeomloop<buildinggeomlen; buildinggeomloop++)
+		{
+			buildinggeomtemp=buildinggeom[buildinggeomloop];
+			gistx.executeSql('INSERT INTO mmpbenfigis (gissurveyworkitemmappingcode, gisbuildingcode, geom, gisstatus) VALUES (?,?,?,?)', [surveyworkitemmappingcode, buildinggeomtemp.buildingcode, buildinggeomtemp.geom, "1"]);
+		}
+	}
+
+	timestamp=new Date().toISOString();
+
+	gistx.executeSql('DELETE FROM syncdates WHERE surveyworkitemmapping=? AND service=?', [surveyworkitemmappingcode, "loadgis"]);
+	gistx.executeSql('INSERT INTO syncdates (service, surveyworkitemmapping, servertime, localtime, remark) VALUES (?,?,?,?,?)', ["loadgis", surveyworkitemmappingcode, lastsynced, timestamp, ""]);
+
+}
+
+mislastdate=""
+gislastdate=""
+
+//============== Load last synced time =========================
+function getdownloadbentime()
+{
+	mislastdate="";
+	gislastdate="";
+	
+	setTimeout(function(){
+		rootdetection.isDeviceRooted(function (result)
+		{
+			if(result==0)
+			{
+				// var db = window.openDatabase("Database", "1.0", "samuday360android", 2000000);
+				var db =window.sqlitePlugin.openDatabase({ name: 'samuday360android.db', location: 'default', androidDatabaseProvider: 'system' });
+				db.transaction(getdownloadbentimesql, errorCB, downloaddata);
+				
+			}else{navigator.notification.alert("Device doesn't Support", function(){}, 'Samuday 360','Done');}
+		}, function (error) {navigator.notification.alert("Device doesn't Support", function(){}, 'Samuday 360','Done');});
+	}, 60);	
+}
+
+function getdownloadbentimesql(gettime)
+{
+	var surveyworkitemmappingcode=CryptoJS.AES.decrypt(localStorage.surveyworkitemmappingcode, localStorage.employeeid).toString(CryptoJS.enc.Utf8).slice(1,-1);
+	gettime.executeSql("SELECT service, servertime FROM syncdates WHERE surveyworkitemmapping=?", [surveyworkitemmappingcode], function(getlasttime, lastresult){
+		for(timeloop=0; timeloop<lastresult.rows.length; timeloop++)
+		{
+			if(lastresult.rows.item(timeloop).service=="benficiarydownloadsavemis"){
+				mislastdate=lastresult.rows.item(timeloop).servertime;
+			}else if(lastresult.rows.item(timeloop).service=="loadgis"){
+				gislastdate=lastresult.rows.item(timeloop).servertime;
+			}
+		}
+	})	
+}

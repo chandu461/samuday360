@@ -91,9 +91,11 @@
           min-width:46px;
         }
       }
+      
     </style>
   </head>
-  <body onload="getWorkItemDetails()">
+   <!-- onload="getWorkItemDetails()" -->
+  <body>
     <main>
       <nav class="navbar navbar-expand-lg navbar-dark" style="background:#0b70b3;padding-top: 0px;padding-bottom: 0px;">
         <a class="navbar-brand" href="#"><img src="img/logo5.png" width="50%" style="height: 48px; width: 49px;"></a>
@@ -142,7 +144,7 @@
     <div class="col-sm-12 card odd" style="height: 340px;" >
       <div class="card-body">
         <h6 class="card-title" id="surveyname"></h6>
-        <span class="fa fa-download" id="downloadben" style="margin-top: -29px; display:none;" onclick="downloaddataloginform()"></span>
+        <span class="fa fa-download" id="downloadben" style="margin-top: -29px;" onclick="downloaddataloginform()"></span>
         <p class="card-text" style="font-style: italic;" id="surveylocations"></p>
         
     <div class="row justify-content-center">
@@ -342,6 +344,8 @@
     e.preventDefault();
     window.location.href="dashboard.html";
   }
+
+  $(document).ready(function(){ getWorkItemDetails(); });
 </script>
 </body>
 </html>

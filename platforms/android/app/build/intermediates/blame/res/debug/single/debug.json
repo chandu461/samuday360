@@ -1,14 +1,14 @@
 [
     {
-        "merged": "F:\\apps\\MOBILE\\Samuday360\\Samuday 360 HCL Submitted\\9 version\\Samuday 360 HCL SSL latest version\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi_ic_launcher.png.flat",
-        "source": "F:\\apps\\MOBILE\\Samuday360\\Samuday 360 HCL Submitted\\9 version\\Samuday 360 HCL SSL latest version\\platforms\\android\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher.png"
+        "merged": "F:\\apps\\MOBILE\\Samuday360\\SAMUDAY 360 REWORK\\Samuday 360 HCL SSL latest version\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_screen.png.flat",
+        "source": "F:\\apps\\MOBILE\\Samuday360\\SAMUDAY 360 REWORK\\Samuday 360 HCL SSL latest version\\platforms\\android\\app\\src\\main\\res\\drawable-mdpi\\screen.png"
     },
     {
-        "merged": "F:\\apps\\MOBILE\\Samuday360\\Samuday 360 HCL Submitted\\9 version\\Samuday 360 HCL SSL latest version\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\xml_config.xml.flat",
-        "source": "F:\\apps\\MOBILE\\Samuday360\\Samuday 360 HCL Submitted\\9 version\\Samuday 360 HCL SSL latest version\\platforms\\android\\app\\src\\main\\res\\xml\\config.xml"
+        "merged": "F:\\apps\\MOBILE\\Samuday360\\SAMUDAY 360 REWORK\\Samuday 360 HCL SSL latest version\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\xml_config.xml.flat",
+        "source": "F:\\apps\\MOBILE\\Samuday360\\SAMUDAY 360 REWORK\\Samuday 360 HCL SSL latest version\\platforms\\android\\app\\src\\main\\res\\xml\\config.xml"
     },
     {
-        "merged": "F:\\apps\\MOBILE\\Samuday360\\Samuday 360 HCL Submitted\\9 version\\Samuday 360 HCL SSL latest version\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_screen.png.flat",
-        "source": "F:\\apps\\MOBILE\\Samuday360\\Samuday 360 HCL Submitted\\9 version\\Samuday 360 HCL SSL latest version\\platforms\\android\\app\\src\\main\\res\\drawable-mdpi\\screen.png"
+        "merged": "F:\\apps\\MOBILE\\Samuday360\\SAMUDAY 360 REWORK\\Samuday 360 HCL SSL latest version\\platforms\\android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi_ic_launcher.png.flat",
+        "source": "F:\\apps\\MOBILE\\Samuday360\\SAMUDAY 360 REWORK\\Samuday 360 HCL SSL latest version\\platforms\\android\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher.png"
     }
 ]
